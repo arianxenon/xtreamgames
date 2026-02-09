@@ -71,14 +71,14 @@
             text-shadow: 0 0 15px rgba(0, 102, 255, 0.3);
         }
         
-        /* Admin Section */
+        /* Admin Section in Header */
         .admin-section {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
         
-        .admin-login-btn {
+        .admin-btn {
             background-color: var(--accent-blue);
             color: white;
             border: none;
@@ -93,12 +93,12 @@
             transition: all 0.3s;
         }
         
-        .admin-login-btn:hover {
+        .admin-btn:hover {
             background-color: var(--accent-light-blue);
             transform: translateY(-2px);
         }
         
-        .admin-info {
+        .user-info {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -108,7 +108,7 @@
             border-left: 3px solid var(--accent-blue);
         }
         
-        .admin-avatar {
+        .user-avatar {
             width: 36px;
             height: 36px;
             border-radius: 50%;
@@ -121,22 +121,22 @@
             font-size: 1.2rem;
         }
         
-        .admin-details {
+        .user-details {
             display: flex;
             flex-direction: column;
         }
         
-        .admin-name {
+        .user-name {
             font-weight: 600;
             color: var(--accent-light-blue);
         }
         
-        .admin-status {
+        .user-role {
             font-size: 0.8rem;
             color: var(--text-secondary);
         }
         
-        .admin-logout {
+        .logout-btn {
             background-color: rgba(255, 50, 50, 0.7);
             color: white;
             border: none;
@@ -150,8 +150,44 @@
             gap: 5px;
         }
         
-        .admin-logout:hover {
+        .logout-btn:hover {
             background-color: #ff3333;
+        }
+        
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--card-bg);
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 2px solid #2a3552;
+            width: 300px;
+        }
+        
+        .search-input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        .search-btn {
+            background: none;
+            border: none;
+            color: var(--accent-light-blue);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         /* Music Player in Header */
@@ -247,8 +283,8 @@
             border-left-color: #ff3333;
         }
         
-        /* Admin Login Modal */
-        .admin-modal {
+        /* Login Modal */
+        .login-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -261,7 +297,7 @@
             align-items: center;
         }
         
-        .admin-modal-content {
+        .login-modal-content {
             background-color: var(--secondary-dark);
             width: 90%;
             max-width: 450px;
@@ -283,35 +319,35 @@
             }
         }
         
-        .admin-modal-header {
+        .login-header {
             background-color: var(--card-bg);
             padding: 25px;
             text-align: center;
             border-bottom: 2px solid var(--accent-blue);
         }
         
-        .admin-modal-header h2 {
+        .login-header h2 {
             color: var(--accent-light-blue);
             font-size: 1.8rem;
             margin-bottom: 10px;
         }
         
-        .admin-modal-body {
+        .login-body {
             padding: 30px;
         }
         
-        .admin-form-group {
+        .login-form-group {
             margin-bottom: 20px;
         }
         
-        .admin-form-group label {
+        .login-form-group label {
             display: block;
             margin-bottom: 8px;
             color: var(--text-secondary);
             font-weight: 500;
         }
         
-        .admin-input {
+        .login-input {
             width: 100%;
             padding: 12px 15px;
             background-color: rgba(19, 26, 45, 0.7);
@@ -322,12 +358,12 @@
             transition: border-color 0.3s;
         }
         
-        .admin-input:focus {
+        .login-input:focus {
             outline: none;
             border-color: var(--accent-blue);
         }
         
-        .admin-submit-btn {
+        .login-btn {
             width: 100%;
             background-color: var(--accent-blue);
             color: white;
@@ -345,12 +381,12 @@
             gap: 10px;
         }
         
-        .admin-submit-btn:hover {
+        .login-btn:hover {
             background-color: var(--accent-light-blue);
             transform: translateY(-2px);
         }
         
-        .admin-error {
+        .login-error {
             color: #ff3333;
             font-size: 0.9rem;
             margin-top: 10px;
@@ -361,7 +397,23 @@
             border-radius: 6px;
         }
         
-        .close-admin-modal {
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .login-footer a {
+            color: var(--accent-light-blue);
+            text-decoration: none;
+        }
+        
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .close-login-modal {
             position: absolute;
             top: 15px;
             right: 15px;
@@ -373,35 +425,44 @@
             transition: color 0.3s;
         }
         
-        .close-admin-modal:hover {
+        .close-login-modal:hover {
             color: var(--accent-blue);
         }
         
-        /* Hide admin buttons for non-admin users */
-        body:not(.admin-mode) .add-game-btn,
-        body:not(.admin-mode) .edit-btn,
-        body:not(.admin-mode) .delete-btn,
-        body:not(.admin-mode) #saveBtn,
-        body:not(.admin-mode) #cancelBtn,
-        body:not(.admin-mode) .add-btn,
-        body:not(.admin-mode) .remove-btn,
-        body:not(.admin-mode) #addMusicUrlBtn,
-        body:not(.admin-mode) #addMediaBtn,
-        body:not(.admin-mode) #addLinkBtn,
-        body:not(.admin-mode) #dbManagerBtn {
-            display: none !important;
+        /* Search Results Info */
+        .search-results-info {
+            background-color: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--accent-blue);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            display: none;
         }
         
-        body:not(.admin-mode) .sidebar {
-            opacity: 0.6;
-            pointer-events: none;
+        .search-results-info i {
+            color: var(--accent-light-blue);
+            font-size: 1.2rem;
         }
         
-        body:not(.admin-mode) .sidebar h3::after {
-            content: " (View Only)";
-            color: #FF9800;
+        .clear-search-btn {
+            background-color: rgba(255, 50, 50, 0.7);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
             font-size: 0.9rem;
-            font-weight: normal;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .clear-search-btn:hover {
+            background-color: #ff3333;
         }
         
         /* Main Content */
@@ -756,6 +817,199 @@
             background-color: #666;
         }
         
+        /* Share Modal */
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .share-modal-content {
+            background-color: var(--secondary-dark);
+            width: 90%;
+            max-width: 550px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--accent-blue);
+        }
+        
+        .share-modal-header {
+            background-color: var(--card-bg);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+        
+        .share-modal-title {
+            font-size: 1.5rem;
+            color: var(--accent-light-blue);
+        }
+        
+        .close-share-modal {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-share-modal:hover {
+            color: var(--accent-blue);
+        }
+        
+        .share-modal-body {
+            padding: 30px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .share-option {
+            background-color: var(--card-bg);
+            border: 2px solid #2a3552;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .share-option:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-5px);
+        }
+        
+        .share-icon {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .share-whatsapp {
+            color: #25D366;
+        }
+        
+        .share-telegram {
+            color: #0088cc;
+        }
+        
+        .share-email {
+            color: #EA4335;
+        }
+        
+        .share-link {
+            color: var(--accent-blue);
+        }
+        
+        .share-download {
+            color: #FF9800;
+        }
+        
+        .share-qr {
+            color: #9C27B0;
+        }
+        
+        .url-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .url-input {
+            flex: 1;
+            padding: 12px;
+            background-color: rgba(19, 26, 45, 0.7);
+            border: 2px solid #2a3552;
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        
+        .copy-btn {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background-color: var(--accent-light-blue);
+        }
+        
+        .qr-container {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+        
+        .export-options {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #2a3552;
+        }
+        
+        .export-btn {
+            width: 100%;
+            background-color: #9C27B0;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+        
+        .export-btn:hover {
+            background-color: #7B1FA2;
+        }
+        
+        .export-json {
+            background-color: #2196F3;
+        }
+        
+        .export-json:hover {
+            background-color: #1976D2;
+        }
+        
         /* Media Modal */
         .media-modal {
             display: none;
@@ -1009,6 +1263,28 @@
             margin: 10px 0;
         }
         
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent-blue);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         /* Responsive */
         @media (max-width: 1400px) {
             .main-content {
@@ -1018,6 +1294,26 @@
             .sidebar {
                 width: 100%;
                 position: static;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .header-content {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .search-container {
+                order: 3;
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            .admin-section {
+                order: 4;
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
             }
         }
         
@@ -1054,120 +1350,49 @@
                 justify-content: center;
             }
             
+            .search-container {
+                width: 100%;
+            }
+            
             .admin-section {
-                order: 3;
                 width: 100%;
                 justify-content: center;
-                margin-top: 10px;
             }
-        }
-        
-        /* Loading Spinner */
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid var(--accent-blue);
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Share Modal (from original code) */
-        .share-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 3000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .share-modal-content {
-            background-color: var(--secondary-dark);
-            width: 90%;
-            max-width: 550px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-            border: 2px solid var(--accent-blue);
-        }
-        
-        .share-modal-header {
-            background-color: var(--card-bg);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--accent-blue);
-        }
-        
-        .share-modal-title {
-            font-size: 1.5rem;
-            color: var(--accent-light-blue);
-        }
-        
-        .close-share-modal {
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.8rem;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-        
-        .close-share-modal:hover {
-            color: var(--accent-blue);
-        }
-        
-        .share-modal-body {
-            padding: 30px;
-            max-height: 80vh;
-            overflow-y: auto;
         }
     </style>
 </head>
 <body>
-    <!-- Admin Login Modal -->
-    <div class="admin-modal" id="adminModal">
-        <div class="admin-modal-content">
-            <button class="close-admin-modal" id="closeAdminModal">&times;</button>
-            <div class="admin-modal-header">
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-modal-content">
+            <button class="close-login-modal" id="closeLoginModal">&times;</button>
+            <div class="login-header">
                 <h2><i class="fas fa-gamepad"></i> Xtream Games Admin</h2>
-                <p>Administrator Access Only</p>
+                <p>Administrator Login</p>
             </div>
-            <div class="admin-modal-body">
-                <form id="adminForm">
-                    <div class="admin-form-group">
-                        <label for="adminUsername"><i class="fas fa-user"></i> Username</label>
-                        <input type="text" id="adminUsername" class="admin-input" placeholder="Enter admin username">
+            <div class="login-body">
+                <form id="loginForm">
+                    <div class="login-form-group">
+                        <label for="loginUsername"><i class="fas fa-user"></i> Username</label>
+                        <input type="text" id="loginUsername" class="login-input" placeholder="Enter admin username" required>
                     </div>
-                    <div class="admin-form-group">
-                        <label for="adminPassword"><i class="fas fa-lock"></i> Password</label>
-                        <input type="password" id="adminPassword" class="admin-input" placeholder="Enter admin password">
+                    <div class="login-form-group">
+                        <label for="loginPassword"><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" id="loginPassword" class="login-input" placeholder="Enter admin password" required>
                     </div>
-                    <div class="admin-error" id="adminError">
+                    <div class="login-error" id="loginError">
                         <i class="fas fa-exclamation-triangle"></i> Invalid username or password
                     </div>
-                    <button type="submit" class="admin-submit-btn">
-                        <i class="fas fa-sign-in-alt"></i> Login as Admin
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login to Admin Panel
                     </button>
                 </form>
+                <div class="login-footer">
+                    <p><i class="fas fa-info-circle"></i> Admin access required for game management only</p>
+                    <p style="margin-top: 10px; font-size: 0.85rem; color: #777;">
+                        All users can browse games without login
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -1184,21 +1409,29 @@
                     <h1>Xtream Games</h1>
                 </div>
                 
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search games...">
+                    <button class="search-btn" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
                 <!-- Admin Section -->
                 <div class="admin-section">
-                    <!-- Login Button (shown when not logged in) -->
-                    <button class="admin-login-btn" id="adminLoginBtn">
-                        <i class="fas fa-user-shield"></i> Admin
+                    <!-- Admin Login Button -->
+                    <button class="admin-btn" id="adminBtn">
+                        <i class="fas fa-user-cog"></i> Admin
                     </button>
                     
-                    <!-- Admin Info (shown when logged in) -->
-                    <div class="admin-info" id="adminInfo" style="display: none;">
-                        <div class="admin-avatar" id="adminAvatar">A</div>
-                        <div class="admin-details">
-                            <div class="admin-name" id="adminName">Admin</div>
-                            <div class="admin-status">Owner</div>
+                    <!-- User Info (shown when logged in) -->
+                    <div class="user-info" id="userInfo" style="display: none;">
+                        <div class="user-avatar" id="userAvatar">A</div>
+                        <div class="user-details">
+                            <div class="user-name" id="userName">Admin</div>
+                            <div class="user-role">Owner</div>
                         </div>
-                        <button class="admin-logout" id="adminLogoutBtn">
+                        <button class="logout-btn" id="logoutBtn">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </button>
                     </div>
@@ -1238,11 +1471,25 @@
     
     <!-- Main Content -->
     <div class="container">
+        <!-- Search Results Info -->
+        <div class="search-results-info" id="searchResultsInfo">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-search"></i>
+                <div>
+                    <strong>Search Results</strong>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;" id="searchResultsCount"></div>
+                </div>
+            </div>
+            <button class="clear-search-btn" id="clearSearchBtn">
+                <i class="fas fa-times"></i> Clear Search
+            </button>
+        </div>
+        
         <div class="main-content">
             <!-- Games Section -->
             <section class="games-section">
                 <div class="games-header">
-                    <h2>Game Collection</h2>
+                    <h2 id="gamesHeader">Game Collection</h2>
                     <div class="header-actions">
                         <button class="share-btn" id="shareSiteBtn">
                             <i class="fas fa-share-alt"></i> Share Site
@@ -1262,13 +1509,13 @@
                 
                 <div class="empty-state" id="emptyState">
                     <i class="fas fa-gamepad"></i>
-                    <h3>No Games Added Yet</h3>
-                    <p>Games will appear here once added</p>
+                    <h3>No Games Found</h3>
+                    <p>Try adding some games or clear your search</p>
                 </div>
             </section>
             
             <!-- Sidebar Form -->
-            <aside class="sidebar">
+            <aside class="sidebar" id="adminSidebar" style="display: none;">
                 <h3 id="formTitle">Add New Game</h3>
                 
                 <form id="gameForm">
@@ -1344,20 +1591,217 @@
         </div>
     </div>
     
-    <!-- All existing modals remain unchanged -->
     <!-- Share Modal -->
     <div class="share-modal" id="shareModal">
-        <!-- ... existing share modal code ... -->
+        <div class="share-modal-content">
+            <div class="share-modal-header">
+                <h3 class="share-modal-title">Share Xtream Games</h3>
+                <button class="close-share-modal" id="closeShareModal">&times;</button>
+            </div>
+            <div class="share-modal-body">
+                <div class="loading-spinner" id="directLinkLoading">
+                    <div class="spinner"></div>
+                    <p>Generating direct link...</p>
+                </div>
+                
+                <h4>Share via:</h4>
+                <div class="share-options">
+                    <div class="share-option" id="shareWhatsApp">
+                        <i class="fab fa-whatsapp share-icon share-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </div>
+                    <div class="share-option" id="shareTelegram">
+                        <i class="fab fa-telegram share-icon share-telegram"></i>
+                        <span>Telegram</span>
+                    </div>
+                    <div class="share-option" id="shareEmail">
+                        <i class="fas fa-envelope share-icon share-email"></i>
+                        <span>Email</span>
+                    </div>
+                    <div class="share-option" id="copyLink">
+                        <i class="fas fa-link share-icon share-link"></i>
+                        <span>Copy Link</span>
+                    </div>
+                    <div class="share-option" id="downloadSite">
+                        <i class="fas fa-download share-icon share-download"></i>
+                        <span>Download Site</span>
+                    </div>
+                    <div class="share-option" id="showQR">
+                        <i class="fas fa-qrcode share-icon share-qr"></i>
+                        <span>QR Code</span>
+                    </div>
+                    <div class="share-option" id="shareDirect">
+                        <i class="fas fa-external-link-alt share-icon" style="color: #FF9800;"></i>
+                        <span>Direct Link</span>
+                    </div>
+                </div>
+                
+                <div class="url-container">
+                    <input type="text" readonly class="url-input" id="siteUrl" value="Loading...">
+                    <button class="copy-btn" id="copyUrlBtn">Copy</button>
+                </div>
+                
+                <div class="qr-container" id="qrContainer">
+                    <h4>Scan QR Code to open on mobile:</h4>
+                    <div class="qr-code" id="qrCode"></div>
+                </div>
+                
+                <!-- Smart Game Sharing Section -->
+                <div class="export-options" style="margin-top: 30px;">
+                    <h4>Smart Game Sharing:</h4>
+                    <p style="color: var(--text-secondary); margin: 10px 0; font-size: 0.9rem;">
+                        Create a smart link that includes your game collection. Perfect for sharing with friends!
+                    </p>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 8px; color: var(--text-secondary);">
+                            <i class="fas fa-cog"></i> Compression Level:
+                        </label>
+                        <select id="compressionLevel" style="width: 100%; padding: 10px; background-color: var(--card-bg); color: white; border: 2px solid #2a3552; border-radius: 8px;">
+                            <option value="light">Light (Fastest, larger link)</option>
+                            <option value="medium" selected>Medium (Balanced)</option>
+                            <option value="high">High (Smallest link, slower)</option>
+                        </select>
+                    </div>
+                    
+                    <button class="export-btn" id="generateSmartLinkBtn" style="background-color: #FF9800;">
+                        <i class="fas fa-bolt"></i> Generate Smart Link
+                    </button>
+                    
+                    <button class="export-btn" id="generateCloudLinkBtn" style="background-color: #2196F3; margin-top: 10px;">
+                        <i class="fas fa-cloud"></i> Create Cloud Share Link
+                    </button>
+                    
+                    <div id="smartLinkContainer" style="display: none; margin-top: 20px;">
+                        <h4>Your Smart Link:</h4>
+                        <div class="url-container">
+                            <input type="text" readonly class="url-input" id="smartLinkInput" value="">
+                            <button class="copy-btn" id="copySmartLinkBtn">Copy</button>
+                        </div>
+                        
+                        <div style="margin-top: 10px; display: flex; gap: 10px;">
+                            <button class="copy-btn" id="testSmartLinkBtn" style="background-color: #25D366; padding: 8px 15px;">
+                                <i class="fas fa-play"></i> Test Link
+                            </button>
+                            <button class="copy-btn" id="shortenSmartLinkBtn" style="background-color: #9C27B0; padding: 8px 15px;">
+                                <i class="fas fa-compress"></i> Shorten
+                            </button>
+                        </div>
+                        
+                        <div style="margin-top: 15px; padding: 10px; background-color: var(--card-bg); border-radius: 8px;">
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 5px 0;">
+                                <i class="fas fa-info-circle" style="color: #3399ff;"></i>
+                                Share this link - recipients will see all your games instantly!
+                            </p>
+                            <div id="linkStats" style="font-size: 0.8rem; color: #b0b8d0; margin-top: 5px;">
+                                <!-- Stats will appear here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="cloudLinkInfo" style="display: none; margin-top: 15px; padding: 10px; background-color: rgba(33, 150, 243, 0.1); border-radius: 8px; border-left: 4px solid #2196F3;">
+                        <p style="color: var(--text-secondary); font-size: 0.85rem;">
+                            <i class="fas fa-cloud-upload-alt" style="color: #2196F3;"></i>
+                            <strong>Cloud Link Created!</strong> Your games are now accessible via a short, shareable link.
+                        </p>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background-color: rgba(19, 26, 45, 0.5); border-radius: 8px;">
+                        <h4>How Smart Links Work:</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                            1. Games are compressed to create shorter links<br>
+                            2. Recipients see games instantly without import<br>
+                            3. Works even with large collections<br>
+                            4. No login or account required
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="export-options" style="margin-top: 30px;">
+                    <h4>Export Your Data:</h4>
+                    <button class="export-btn" id="exportGamesBtn">
+                        <i class="fas fa-file-export"></i> Export Games Data (JSON)
+                    </button>
+                    <button class="export-btn export-json" id="importGamesBtn">
+                        <i class="fas fa-file-import"></i> Import Games Data
+                    </button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;">
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- Database Manager Modal -->
     <div class="db-modal" id="dbModal">
-        <!-- ... existing database modal code ... -->
+        <div class="db-modal-content">
+            <div class="db-modal-header">
+                <h3 class="share-modal-title">Database Manager</h3>
+                <button class="close-share-modal" id="closeDbModal">&times;</button>
+            </div>
+            <div class="db-modal-body">
+                <div class="db-stats">
+                    <div class="db-stat-card">
+                        <i class="fas fa-gamepad fa-2x" style="color: #0066ff;"></i>
+                        <div class="db-stat-value" id="gamesCount">0</div>
+                        <div>Games</div>
+                    </div>
+                    <div class="db-stat-card">
+                        <i class="fas fa-music fa-2x" style="color: #25D366;"></i>
+                        <div class="db-stat-value" id="musicCount">0</div>
+                        <div>Tracks</div>
+                    </div>
+                    <div class="db-stat-card">
+                        <i class="fas fa-hdd fa-2x" style="color: #FF9800;"></i>
+                        <div class="db-stat-value" id="dbSize">0 KB</div>
+                        <div>Storage Used</div>
+                    </div>
+                    <div class="db-stat-card">
+                        <i class="fas fa-sync-alt fa-2x" style="color: #9C27B0;"></i>
+                        <div class="db-stat-value" id="lastSync">Never</div>
+                        <div>Last Sync</div>
+                    </div>
+                </div>
+                
+                <div class="export-options">
+                    <h4>Database Actions:</h4>
+                    <button class="export-btn" id="backupDbBtn">
+                        <i class="fas fa-download"></i> Full Backup
+                    </button>
+                    <button class="export-btn" id="restoreDbBtn" style="background-color: #2196F3;">
+                        <i class="fas fa-upload"></i> Restore Backup
+                    </button>
+                    <button class="export-btn" id="clearDbBtn" style="background-color: #f44336;">
+                        <i class="fas fa-trash"></i> Clear Database
+                    </button>
+                    <input type="file" id="restoreFile" accept=".json" style="display: none;">
+                    
+                    <button class="export-btn export-json" id="syncDbBtn" style="background-color: #4CAF50; margin-top: 20px;">
+                        <i class="fas fa-sync"></i> Sync Across Browsers
+                    </button>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background-color: var(--card-bg); border-radius: 8px;">
+                        <h4>Sync Information:</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                            Data is automatically saved in your browser's local storage. 
+                            To sync across different browsers/devices, export and import the backup file.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- Media/Game Details Modal -->
     <div class="media-modal" id="mediaModal">
-        <!-- ... existing media modal code ... -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Game Details</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be loaded here -->
+            </div>
+        </div>
     </div>
     
     <!-- Toast Notification -->
@@ -1367,89 +1811,180 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     
     <script>
-        // ==================== SIMPLE ADMIN SYSTEM ====================
-        const ADMIN_CREDENTIALS = {
+        // ==================== AUTHENTICATION SYSTEM ====================
+        const AUTH_CONFIG = {
             USERNAME: 'arianxenon',
-            PASSWORD: '2981354361max'
+            PASSWORD: '2981354361max',
+            STORAGE_KEY: 'xtreamGamesAuth_v1'
         };
         
-        // Simple admin system
-        let isAdminLoggedIn = false;
-        
-        // Check if admin is logged in from localStorage
-        function checkAdminStatus() {
-            const adminStatus = localStorage.getItem('xtreamAdminLoggedIn');
-            if (adminStatus === 'true') {
-                isAdminLoggedIn = true;
-                updateAdminUI();
-            }
-        }
-        
-        // Admin login function
-        function adminLogin(username, password) {
-            if (username === ADMIN_CREDENTIALS.USERNAME && password === ADMIN_CREDENTIALS.PASSWORD) {
-                isAdminLoggedIn = true;
-                localStorage.setItem('xtreamAdminLoggedIn', 'true');
-                updateAdminUI();
-                closeAdminModal();
-                showToast('Admin access granted!', 'success');
-                return true;
-            }
-            return false;
-        }
-        
-        // Admin logout function
-        function adminLogout() {
-            if (confirm('Logout from admin mode?')) {
-                isAdminLoggedIn = false;
-                localStorage.removeItem('xtreamAdminLoggedIn');
-                updateAdminUI();
-                showToast('Admin logged out', 'info');
-            }
-        }
-        
-        // Update UI based on admin status
-        function updateAdminUI() {
-            const adminLoginBtn = document.getElementById('adminLoginBtn');
-            const adminInfo = document.getElementById('adminInfo');
-            
-            if (isAdminLoggedIn) {
-                // Admin mode
-                document.body.classList.add('admin-mode');
-                adminLoginBtn.style.display = 'none';
-                adminInfo.style.display = 'flex';
-            } else {
-                // View mode
-                document.body.classList.remove('admin-mode');
-                adminLoginBtn.style.display = 'flex';
-                adminInfo.style.display = 'none';
+        class AuthSystem {
+            constructor() {
+                this.isLoggedIn = false;
+                this.user = null;
+                this.init();
             }
             
-            // Reload games to show/hide edit buttons
-            renderGames();
-        }
-        
-        // Check if user can perform admin actions
-        function checkAdminAccess(actionName = 'perform this action') {
-            if (!isAdminLoggedIn) {
-                showToast(`Please login as admin to ${actionName}`, 'error');
+            init() {
+                this.loadAuthState();
+                this.setupEventListeners();
+                this.checkAuth();
+            }
+            
+            loadAuthState() {
+                const authData = localStorage.getItem(AUTH_CONFIG.STORAGE_KEY);
+                if (authData) {
+                    try {
+                        const data = JSON.parse(authData);
+                        if (data.isLoggedIn && data.user && data.expires > Date.now()) {
+                            this.isLoggedIn = true;
+                            this.user = data.user;
+                        } else {
+                            // Session expired
+                            this.logout();
+                        }
+                    } catch (e) {
+                        this.logout();
+                    }
+                }
+            }
+            
+            saveAuthState() {
+                const authData = {
+                    isLoggedIn: this.isLoggedIn,
+                    user: this.user,
+                    expires: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+                };
+                localStorage.setItem(AUTH_CONFIG.STORAGE_KEY, JSON.stringify(authData));
+            }
+            
+            login(username, password) {
+                if (username === AUTH_CONFIG.USERNAME && password === AUTH_CONFIG.PASSWORD) {
+                    this.isLoggedIn = true;
+                    this.user = {
+                        username: username,
+                        name: 'Admin',
+                        avatar: 'A',
+                        role: 'Owner'
+                    };
+                    this.saveAuthState();
+                    return true;
+                }
                 return false;
             }
-            return true;
-        }
-        
-        // Admin modal functions
-        function openAdminModal() {
-            document.getElementById('adminModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeAdminModal() {
-            document.getElementById('adminModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            document.getElementById('adminError').style.display = 'none';
-            document.getElementById('adminUsername').value = '';
-            document.getElementById('adminPassword').value = '';
+            
+            logout() {
+                this.isLoggedIn = false;
+                this.user = null;
+                localStorage.removeItem(AUTH_CONFIG.STORAGE_KEY);
+            }
+            
+            isAuthenticated() {
+                return this.isLoggedIn;
+            }
+            
+            setupEventListeners() {
+                // Login form
+                document.getElementById('loginForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const username = document.getElementById('loginUsername').value;
+                    const password = document.getElementById('loginPassword').value;
+                    
+                    if (this.login(username, password)) {
+                        this.hideLoginModal();
+                        this.updateUI();
+                        showToast('Successfully logged in as admin!', 'success');
+                    } else {
+                        document.getElementById('loginError').style.display = 'block';
+                        setTimeout(() => {
+                            document.getElementById('loginError').style.display = 'none';
+                        }, 3000);
+                    }
+                });
+                
+                // Admin button in header
+                document.getElementById('adminBtn').addEventListener('click', () => {
+                    if (this.isAuthenticated()) {
+                        // If already logged in, show user info
+                        this.updateUI();
+                    } else {
+                        this.showLoginModal();
+                    }
+                });
+                
+                // Logout button
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    if (confirm('Are you sure you want to logout?')) {
+                        this.logout();
+                        this.updateUI();
+                        showToast('Successfully logged out.', 'info');
+                    }
+                });
+                
+                // Close login modal
+                document.getElementById('closeLoginModal').addEventListener('click', () => {
+                    this.hideLoginModal();
+                });
+                
+                // Close modal when clicking outside
+                document.getElementById('loginModal').addEventListener('click', (e) => {
+                    if (e.target === document.getElementById('loginModal')) {
+                        this.hideLoginModal();
+                    }
+                });
+            }
+            
+            checkAuth() {
+                if (this.isAuthenticated()) {
+                    this.updateUI();
+                }
+            }
+            
+            showLoginModal() {
+                document.getElementById('loginModal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+            
+            hideLoginModal() {
+                document.getElementById('loginModal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            
+            updateUI() {
+                const isAuthenticated = this.isAuthenticated();
+                const adminSidebar = document.getElementById('adminSidebar');
+                const addNewGameBtn = document.getElementById('addNewGame');
+                const userInfo = document.getElementById('userInfo');
+                const adminBtn = document.getElementById('adminBtn');
+                
+                if (isAuthenticated) {
+                    // Admin mode - show management options
+                    adminSidebar.style.display = 'block';
+                    addNewGameBtn.style.display = 'flex';
+                    userInfo.style.display = 'flex';
+                    adminBtn.style.display = 'none';
+                    
+                    // Update user info
+                    document.getElementById('userName').textContent = this.user.name;
+                    document.getElementById('userAvatar').textContent = this.user.avatar;
+                } else {
+                    // View mode - hide management options
+                    adminSidebar.style.display = 'none';
+                    addNewGameBtn.style.display = 'none';
+                    userInfo.style.display = 'none';
+                    adminBtn.style.display = 'flex';
+                }
+            }
+            
+            // Check access for sensitive operations
+            checkAccess() {
+                if (!this.isAuthenticated()) {
+                    showToast('Admin access required for this action.', 'error');
+                    this.showLoginModal();
+                    return false;
+                }
+                return true;
+            }
         }
         
         // ==================== DATABASE MANAGER ====================
@@ -1458,7 +1993,9 @@
                 this.STORAGE_KEYS = {
                     GAMES: 'xtreamGames_v3',
                     MUSIC: 'xtreamGamesMusic_v3',
-                    SETTINGS: 'xtreamGamesSettings_v3'
+                    SETTINGS: 'xtreamGamesSettings_v3',
+                    BACKUPS: 'xtreamGamesBackups_v3',
+                    CLOUD_LINKS: 'xtreamGamesCloudLinks_v3'
                 };
                 
                 this.initializeDatabase();
@@ -1472,7 +2009,8 @@
                         version: '3.0',
                         created: new Date().toISOString(),
                         lastSync: null,
-                        autoBackup: true
+                        autoBackup: true,
+                        cloudLinks: []
                     });
                 }
             }
@@ -1498,6 +2036,7 @@
             
             saveGames(games) {
                 localStorage.setItem(this.STORAGE_KEYS.GAMES, JSON.stringify(games));
+                this.updateLastSync();
                 return true;
             }
             
@@ -1543,6 +2082,7 @@
             
             saveMusicPlaylist(playlist) {
                 localStorage.setItem(this.STORAGE_KEYS.MUSIC, JSON.stringify(playlist));
+                this.updateLastSync();
                 return true;
             }
             
@@ -1575,6 +2115,7 @@
                 totalSize += localStorage.getItem(this.STORAGE_KEYS.GAMES)?.length || 0;
                 totalSize += localStorage.getItem(this.STORAGE_KEYS.MUSIC)?.length || 0;
                 totalSize += localStorage.getItem(this.STORAGE_KEYS.SETTINGS)?.length || 0;
+                totalSize += localStorage.getItem(this.STORAGE_KEYS.BACKUPS)?.length || 0;
                 
                 return {
                     gamesCount: games.length,
@@ -1583,6 +2124,234 @@
                     lastSync: settings?.lastSync || 'Never',
                     totalSize: totalSize
                 };
+            }
+            
+            // Search games
+            searchGames(query) {
+                const games = this.getGames();
+                if (!query || query.trim() === '') return games;
+                
+                const searchTerm = query.toLowerCase().trim();
+                return games.filter(game => 
+                    game.name.toLowerCase().includes(searchTerm) ||
+                    (game.description && game.description.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            // Smart Link System
+            compressGamesData(games, level = 'medium') {
+                try {
+                    // Remove unnecessary data to reduce size
+                    const compressedGames = games.map(game => ({
+                        id: game.id,
+                        name: game.name,
+                        mainImage: game.mainImage,
+                        description: game.description ? game.description.substring(0, 200) : '',
+                        media: game.media ? game.media.slice(0, 3) : [],
+                        downloadLinks: game.downloadLinks ? game.downloadLinks.slice(0, 2) : []
+                    }));
+                    
+                    const data = {
+                        v: '3.0',
+                        t: new Date().getTime(),
+                        g: compressedGames,
+                        c: level
+                    };
+                    
+                    // Text compression by removing whitespace
+                    let jsonString = JSON.stringify(data);
+                    
+                    if (level === 'high') {
+                        // Advanced compression
+                        jsonString = jsonString.replace(/\s+/g, '');
+                    }
+                    
+                    // Base64 encoding with URL encoding
+                    const base64String = btoa(encodeURIComponent(jsonString));
+                    
+                    return {
+                        data: base64String,
+                        originalSize: JSON.stringify(games).length,
+                        compressedSize: base64String.length,
+                        ratio: Math.round((base64String.length / JSON.stringify(games).length) * 100) + '%'
+                    };
+                } catch (error) {
+                    console.error('Compression error:', error);
+                    return null;
+                }
+            }
+            
+            // Decompress data
+            decompressGamesData(compressedData) {
+                try {
+                    const jsonString = decodeURIComponent(atob(compressedData));
+                    const data = JSON.parse(jsonString);
+                    
+                    if (!data.g || !Array.isArray(data.g)) {
+                        throw new Error('Invalid compressed data');
+                    }
+                    
+                    // Convert to original format
+                    const games = data.g.map(game => ({
+                        id: game.id || Date.now() + Math.random(),
+                        name: game.name || 'Unnamed Game',
+                        mainImage: game.mainImage || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1080&h=1920&fit=crop',
+                        description: game.description || '',
+                        media: game.media || [],
+                        downloadLinks: game.downloadLinks || [],
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    }));
+                    
+                    return games;
+                } catch (error) {
+                    console.error('Decompression error:', error);
+                    return null;
+                }
+            }
+            
+            // Create smart link with chunking
+            createSmartLink(compressionLevel = 'medium') {
+                const games = this.getGames();
+                if (games.length === 0) {
+                    return { error: 'No games to share' };
+                }
+                
+                // If too many games, split them
+                const MAX_GAMES_PER_LINK = 10;
+                const chunks = [];
+                
+                for (let i = 0; i < games.length; i += MAX_GAMES_PER_LINK) {
+                    const chunk = games.slice(i, i + MAX_GAMES_PER_LINK);
+                    const compressed = this.compressGamesData(chunk, compressionLevel);
+                    if (compressed) {
+                        chunks.push(compressed.data);
+                    }
+                }
+                
+                const baseUrl = window.location.origin + window.location.pathname;
+                
+                if (chunks.length === 1) {
+                    // Single link
+                    return {
+                        type: 'single',
+                        url: `${baseUrl}?share=${chunks[0]}&v=3`,
+                        size: chunks[0].length,
+                        games: games.length
+                    };
+                } else {
+                    // Multiple links (for large collections)
+                    const links = chunks.map((chunk, index) => 
+                        `${baseUrl}?share=${chunk}&part=${index + 1}&total=${chunks.length}&v=3`
+                    );
+                    
+                    // Save multiple links
+                    const multiLinkId = 'ml_' + Date.now();
+                    localStorage.setItem(`multilink_${multiLinkId}`, JSON.stringify({
+                        links: links,
+                        createdAt: new Date().toISOString(),
+                        gameCount: games.length
+                    }));
+                    
+                    return {
+                        type: 'multi',
+                        url: `${baseUrl}?multilink=${multiLinkId}`,
+                        links: links,
+                        size: chunks.reduce((sum, chunk) => sum + chunk.length, 0),
+                        games: games.length,
+                        parts: chunks.length
+                    };
+                }
+            }
+            
+            // Load from smart link
+            loadFromSmartLink() {
+                try {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    
+                    // Check for multi-link
+                    const multiLinkId = urlParams.get('multilink');
+                    if (multiLinkId) {
+                        const multiLinkData = localStorage.getItem(`multilink_${multiLinkId}`);
+                        if (multiLinkData) {
+                            const data = JSON.parse(multiLinkData);
+                            showToast(`Found multi-link with ${data.gameCount} games in ${data.links.length} parts`);
+                            return { type: 'multi', data: data };
+                        }
+                    }
+                    
+                    // Check for simple link
+                    const shareData = urlParams.get('share');
+                    if (shareData) {
+                        const games = this.decompressGamesData(shareData);
+                        if (games && games.length > 0) {
+                            const part = urlParams.get('part');
+                            const total = urlParams.get('total');
+                            
+                            if (part && total) {
+                                // Part of a multi-link collection
+                                showToast(`Loaded part ${part} of ${total} (${games.length} games)`);
+                                return { type: 'chunk', games: games, part: part, total: total };
+                            } else {
+                                // Complete link
+                                return { type: 'single', games: games };
+                            }
+                        }
+                    }
+                    
+                    return null;
+                } catch (error) {
+                    console.error('Error loading from smart link:', error);
+                    return null;
+                }
+            }
+            
+            // Create cloud link (simulation)
+            createCloudLink() {
+                const games = this.getGames();
+                if (games.length === 0) {
+                    return { error: 'No games to share' };
+                }
+                
+                // Cloud link simulation - in reality should be sent to server
+                const cloudId = 'cloud_' + Math.random().toString(36).substr(2, 9);
+                const shareData = this.compressGamesData(games, 'high');
+                
+                if (!shareData) {
+                    return { error: 'Failed to compress data' };
+                }
+                
+                // Temporary storage in localStorage (server simulation)
+                localStorage.setItem(`cloud_${cloudId}`, shareData.data);
+                
+                // Expiration: 7 days
+                const expiresAt = new Date();
+                expiresAt.setDate(expiresAt.getDate() + 7);
+                
+                // Save link info
+                const cloudLinks = this.getCloudLinks();
+                cloudLinks.push({
+                    id: cloudId,
+                    createdAt: new Date().toISOString(),
+                    expiresAt: expiresAt.toISOString(),
+                    gameCount: games.length,
+                    views: 0
+                });
+                
+                localStorage.setItem(this.STORAGE_KEYS.CLOUD_LINKS, JSON.stringify(cloudLinks));
+                
+                const baseUrl = window.location.origin + window.location.pathname;
+                return {
+                    url: `${baseUrl}?cloud=${cloudId}`,
+                    id: cloudId,
+                    expires: expiresAt.toLocaleDateString(),
+                    games: games.length
+                };
+            }
+            
+            getCloudLinks() {
+                const linksJson = localStorage.getItem(this.STORAGE_KEYS.CLOUD_LINKS);
+                return linksJson ? JSON.parse(linksJson) : [];
             }
         }
         
@@ -1614,14 +2383,12 @@
         const closeModal = document.getElementById('closeModal');
         const dbManagerBtn = document.getElementById('dbManagerBtn');
         const dbStatus = document.getElementById('dbStatus');
-        
-        // Admin Modal Elements
-        const adminModal = document.getElementById('adminModal');
-        const closeAdminModalBtn = document.getElementById('closeAdminModal');
-        const adminForm = document.getElementById('adminForm');
-        const adminError = document.getElementById('adminError');
-        const adminLoginBtn = document.getElementById('adminLoginBtn');
-        const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchResultsInfo = document.getElementById('searchResultsInfo');
+        const searchResultsCount = document.getElementById('searchResultsCount');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        const gamesHeader = document.getElementById('gamesHeader');
         
         // Database Manager Modal Elements
         const dbModal = document.getElementById('dbModal');
@@ -1641,6 +2408,31 @@
         const closeShareModal = document.getElementById('closeShareModal');
         const siteUrlInput = document.getElementById('siteUrl');
         const copyUrlBtn = document.getElementById('copyUrlBtn');
+        const shareWhatsApp = document.getElementById('shareWhatsApp');
+        const shareTelegram = document.getElementById('shareTelegram');
+        const shareEmail = document.getElementById('shareEmail');
+        const copyLink = document.getElementById('copyLink');
+        const downloadSite = document.getElementById('downloadSite');
+        const showQR = document.getElementById('showQR');
+        const qrContainer = document.getElementById('qrContainer');
+        const qrCode = document.getElementById('qrCode');
+        const exportGamesBtn = document.getElementById('exportGamesBtn');
+        const importGamesBtn = document.getElementById('importGamesBtn');
+        const importFile = document.getElementById('importFile');
+        
+        // Smart Link Elements
+        const shareDirect = document.getElementById('shareDirect');
+        const generateSmartLinkBtn = document.getElementById('generateSmartLinkBtn');
+        const generateCloudLinkBtn = document.getElementById('generateCloudLinkBtn');
+        const smartLinkContainer = document.getElementById('smartLinkContainer');
+        const smartLinkInput = document.getElementById('smartLinkInput');
+        const copySmartLinkBtn = document.getElementById('copySmartLinkBtn');
+        const testSmartLinkBtn = document.getElementById('testSmartLinkBtn');
+        const shortenSmartLinkBtn = document.getElementById('shortenSmartLinkBtn');
+        const linkStats = document.getElementById('linkStats');
+        const compressionLevel = document.getElementById('compressionLevel');
+        const cloudLinkInfo = document.getElementById('cloudLinkInfo');
+        const directLinkLoading = document.getElementById('directLinkLoading');
         
         // Toast Notification
         const toast = document.getElementById('toast');
@@ -1663,27 +2455,263 @@
         let musicPlaylist = [];
         let currentMusicIndex = 0;
         let isPlaying = false;
+        let updateProgressInterval;
+        let isSearching = false;
+        let currentSearchQuery = '';
         
         // Initialize Database Manager
         const db = new DatabaseManager();
         
+        // Initialize Authentication System
+        const authSystem = new AuthSystem();
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Check admin status
-            checkAdminStatus();
+            // Check authentication first
+            authSystem.checkAuth();
             
-            // Load data
+            // Then load the rest
             loadGames();
             loadMusicPlaylist();
             setupEventListeners();
             loadDefaultMusic();
+            updateSiteUrl();
             updateDatabaseStatus();
+            
+            // Load from smart link if available
+            loadFromSmartLink();
             
             // Load sample games if empty
             if (db.getGames().length === 0) {
                 loadSampleGames();
             }
         });
+        
+        // ==================== SEARCH FUNCTIONALITY ====================
+        function performSearch(query) {
+            currentSearchQuery = query;
+            
+            if (!query || query.trim() === '') {
+                // Clear search
+                searchResultsInfo.style.display = 'none';
+                isSearching = false;
+                gamesHeader.textContent = 'Game Collection';
+                loadGames();
+                return;
+            }
+            
+            const searchResults = db.searchGames(query);
+            isSearching = true;
+            
+            // Update search results info
+            searchResultsCount.textContent = `Found ${searchResults.length} games for "${query}"`;
+            searchResultsInfo.style.display = 'flex';
+            
+            // Update header
+            gamesHeader.textContent = `Search Results for "${query}"`;
+            
+            // Display search results
+            displayGames(searchResults);
+        }
+        
+        function displayGames(gamesToDisplay) {
+            if (gamesToDisplay.length === 0) {
+                emptyState.style.display = 'block';
+                gamesGrid.innerHTML = '';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            gamesGrid.innerHTML = '';
+            
+            const isAuthenticated = authSystem.isAuthenticated();
+            
+            gamesToDisplay.forEach(game => {
+                const gameCard = document.createElement('div');
+                gameCard.className = 'game-card';
+                
+                gameCard.innerHTML = `
+                    <div class="game-image-container">
+                        <img src="${game.mainImage}" alt="${game.name}" class="game-image" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1080&h=1920&fit=crop'">
+                        
+                        <div class="game-overlay">
+                            <div class="game-title">${game.name}</div>
+                            <div class="game-actions">
+                                ${isAuthenticated ? `
+                                    <button class="action-btn edit-btn" onclick="editGame(${game.id})">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                ` : ''}
+                                <button class="action-btn" onclick="viewGameDetails(${game.id})">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                                <button class="action-btn share-game-btn" onclick="shareGame(${game.id})">
+                                    <i class="fas fa-share"></i> Share
+                                </button>
+                                ${isAuthenticated ? `
+                                    <button class="action-btn delete-btn" onclick="deleteGame(${game.id})">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                gameCard.addEventListener('click', function(e) {
+                    if (!e.target.closest('.game-actions')) {
+                        viewGameDetails(game.id);
+                    }
+                });
+                
+                gamesGrid.appendChild(gameCard);
+            });
+        }
+        
+        // ==================== MODIFIED FUNCTIONS ====================
+        
+        // Load from smart link
+        function loadFromSmartLink() {
+            const result = db.loadFromSmartLink();
+            if (!result) return;
+            
+            if (result.type === 'single' && result.games) {
+                handleSmartLinkImport(result.games);
+            } else if (result.type === 'chunk') {
+                showToast(`Loaded part ${result.part} of ${result.total} with ${result.games.length} games`, 'info');
+                handleSmartLinkImport(result.games);
+            } else if (result.type === 'multi') {
+                showToast(`Found multi-link with ${result.data.gameCount} games in ${result.data.links.length} parts`, 'info');
+            }
+        }
+        
+        // Handle smart link import
+        function handleSmartLinkImport(importedGames) {
+            if (!importedGames || importedGames.length === 0) return;
+            
+            const existingGames = db.getGames();
+            
+            // If we have no games, add directly
+            if (existingGames.length === 0) {
+                db.saveGames(importedGames);
+                loadGames();
+                updateDatabaseStatus();
+                showToast(`Loaded ${importedGames.length} games from link!`);
+                return;
+            }
+            
+            // Otherwise ask
+            const shouldMerge = confirm(
+                `This link contains ${importedGames.length} games.\n\n` +
+                `You currently have ${existingGames.length} games.\n\n` +
+                `Click OK to merge with existing games.\n` +
+                `Click Cancel to replace all games.`
+            );
+            
+            if (shouldMerge) {
+                // Merge
+                const existingIds = existingGames.map(g => g.id);
+                const newGames = importedGames.filter(g => !existingIds.includes(g.id));
+                const mergedGames = [...existingGames, ...newGames];
+                db.saveGames(mergedGames);
+                showToast(`Added ${newGames.length} new games (merged)`);
+            } else {
+                // Replace
+                db.saveGames(importedGames);
+                showToast(`Replaced all games with ${importedGames.length} new games`);
+            }
+            
+            loadGames();
+            updateDatabaseStatus();
+        }
+        
+        // Generate smart link
+        function generateSmartLink() {
+            directLinkLoading.style.display = 'block';
+            smartLinkContainer.style.display = 'none';
+            
+            setTimeout(() => {
+                try {
+                    const level = compressionLevel.value;
+                    const result = db.createSmartLink(level);
+                    
+                    directLinkLoading.style.display = 'none';
+                    
+                    if (result.error) {
+                        showToast(result.error, 'error');
+                        return;
+                    }
+                    
+                    if (result.type === 'single') {
+                        smartLinkInput.value = result.url;
+                        linkStats.innerHTML = `
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Games: ${result.games}</span>
+                                <span>Link Size: ${Math.round(result.size / 1024 * 100) / 100} KB</span>
+                                <span>Type: Single Link</span>
+                            </div>
+                        `;
+                    } else {
+                        smartLinkInput.value = result.url;
+                        linkStats.innerHTML = `
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Games: ${result.games}</span>
+                                <span>Parts: ${result.parts}</span>
+                                <span>Type: Multi-Part Link</span>
+                            </div>
+                        `;
+                    }
+                    
+                    smartLinkContainer.style.display = 'block';
+                    smartLinkContainer.scrollIntoView({ behavior: 'smooth' });
+                    
+                    showToast(`Smart link generated for ${result.games} games!`);
+                    
+                } catch (error) {
+                    directLinkLoading.style.display = 'none';
+                    console.error('Error generating smart link:', error);
+                    showToast('Error generating link', 'error');
+                }
+            }, 100);
+        }
+        
+        // Generate cloud link
+        function generateCloudLink() {
+            directLinkLoading.style.display = 'block';
+            
+            setTimeout(() => {
+                try {
+                    const result = db.createCloudLink();
+                    
+                    directLinkLoading.style.display = 'none';
+                    
+                    if (result.error) {
+                        showToast(result.error, 'error');
+                        return;
+                    }
+                    
+                    smartLinkInput.value = result.url;
+                    linkStats.innerHTML = `
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Games: ${result.games}</span>
+                            <span>Expires: ${result.expires}</span>
+                            <span>Type: Cloud Link</span>
+                        </div>
+                    `;
+                    
+                    smartLinkContainer.style.display = 'block';
+                    cloudLinkInfo.style.display = 'block';
+                    smartLinkContainer.scrollIntoView({ behavior: 'smooth' });
+                    
+                    showToast(`Cloud link created! Expires on ${result.expires}`);
+                    
+                } catch (error) {
+                    directLinkLoading.style.display = 'none';
+                    console.error('Error generating cloud link:', error);
+                    showToast('Error generating cloud link', 'error');
+                }
+            }, 100);
+        }
         
         // Update database status
         function updateDatabaseStatus() {
@@ -1696,54 +2724,50 @@
         
         // Event Listeners
         function setupEventListeners() {
-            // Admin system
-            adminLoginBtn.addEventListener('click', openAdminModal);
-            adminLogoutBtn.addEventListener('click', adminLogout);
-            closeAdminModalBtn.addEventListener('click', closeAdminModal);
+            // Search functionality
+            searchBtn.addEventListener('click', () => {
+                performSearch(searchInput.value);
+            });
             
-            adminForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('adminUsername').value;
-                const password = document.getElementById('adminPassword').value;
-                
-                if (adminLogin(username, password)) {
-                    closeAdminModal();
-                } else {
-                    adminError.style.display = 'block';
-                    setTimeout(() => {
-                        adminError.style.display = 'none';
-                    }, 3000);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch(searchInput.value);
                 }
             });
             
-            adminModal.addEventListener('click', function(e) {
-                if (e.target === adminModal) {
-                    closeAdminModal();
-                }
+            clearSearchBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                performSearch('');
             });
             
-            // Game management
-            addNewGameBtn.addEventListener('click', function() {
-                if (checkAdminAccess('add new games')) {
+            // Modified with auth check
+            addNewGameBtn.addEventListener('click', () => {
+                if (authSystem.checkAccess()) {
                     resetForm();
                 }
             });
             
-            addMediaBtn.addEventListener('click', function() {
-                if (checkAdminAccess('add media')) {
+            addMediaBtn.addEventListener('click', () => {
+                if (authSystem.checkAccess()) {
                     addMediaItem();
                 }
             });
             
-            addMusicUrlBtn.addEventListener('click', function() {
-                if (checkAdminAccess('add music')) {
+            addMusicUrlBtn.addEventListener('click', () => {
+                if (authSystem.checkAccess()) {
                     addMusicToPlaylist();
                 }
             });
             
-            addLinkBtn.addEventListener('click', function() {
-                if (checkAdminAccess('add download links')) {
+            addLinkBtn.addEventListener('click', () => {
+                if (authSystem.checkAccess()) {
                     addDownloadLink();
+                }
+            });
+            
+            addMusicBtn.addEventListener('click', () => {
+                if (authSystem.checkAccess()) {
+                    musicUrlInput.scrollIntoView({behavior: 'smooth'});
                 }
             });
             
@@ -1751,12 +2775,7 @@
             cancelBtn.addEventListener('click', resetForm);
             
             // Database Manager
-            dbManagerBtn.addEventListener('click', function() {
-                if (checkAdminAccess('access database manager')) {
-                    openDbModal();
-                }
-            });
-            
+            dbManagerBtn.addEventListener('click', openDbModal);
             closeDbModal.addEventListener('click', closeDbModalFunc);
             dbModal.addEventListener('click', function(e) {
                 if (e.target === dbModal) {
@@ -1779,15 +2798,53 @@
                 }
             });
             
+            copyUrlBtn.addEventListener('click', copySiteUrl);
+            shareWhatsApp.addEventListener('click', shareViaWhatsApp);
+            shareTelegram.addEventListener('click', shareViaTelegram);
+            shareEmail.addEventListener('click', shareViaEmail);
+            copyLink.addEventListener('click', copySiteUrl);
+            downloadSite.addEventListener('click', downloadSiteFiles);
+            showQR.addEventListener('click', generateQRCode);
+            exportGamesBtn.addEventListener('click', exportGamesData);
+            importGamesBtn.addEventListener('click', () => importFile.click());
+            importFile.addEventListener('change', importGamesData);
+            
+            // Smart link functionality
+            shareDirect.addEventListener('click', generateSmartLink);
+            generateSmartLinkBtn.addEventListener('click', generateSmartLink);
+            generateCloudLinkBtn.addEventListener('click', generateCloudLink);
+            
+            copySmartLinkBtn.addEventListener('click', function() {
+                if (smartLinkInput.value) {
+                    smartLinkInput.select();
+                    navigator.clipboard.writeText(smartLinkInput.value).then(() => {
+                        showToast('Smart link copied!');
+                    }).catch(err => {
+                        console.error('Failed to copy:', err);
+                        showToast('Failed to copy link', 'error');
+                    });
+                }
+            });
+            
+            testSmartLinkBtn.addEventListener('click', function() {
+                if (smartLinkInput.value) {
+                    window.open(smartLinkInput.value, '_blank');
+                }
+            });
+            
+            shortenSmartLinkBtn.addEventListener('click', function() {
+                if (smartLinkInput.value) {
+                    // Link shortening simulation
+                    const shortUrl = `https://xtre.am/${Math.random().toString(36).substr(2, 6)}`;
+                    smartLinkInput.value = shortUrl;
+                    showToast('Link shortened (simulated)');
+                }
+            });
+            
             // Music player controls
             playPauseBtn.addEventListener('click', togglePlayPause);
             prevBtn.addEventListener('click', playPrevious);
             nextBtn.addEventListener('click', playNext);
-            addMusicBtn.addEventListener('click', function() {
-                if (isAdminLoggedIn) {
-                    musicUrlInput.scrollIntoView({behavior: 'smooth'});
-                }
-            });
             
             // Modal controls
             closeModal.addEventListener('click', closeMediaModal);
@@ -1814,7 +2871,7 @@
             mediaUrlInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
-                    if (isAdminLoggedIn) {
+                    if (authSystem.checkAccess()) {
                         addMediaItem();
                     }
                 }
@@ -1823,7 +2880,7 @@
             musicUrlInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
-                    if (isAdminLoggedIn) {
+                    if (authSystem.checkAccess()) {
                         addMusicToPlaylist();
                     }
                 }
@@ -1832,6 +2889,8 @@
         
         // Database Manager Functions
         function openDbModal() {
+            if (!authSystem.checkAccess()) return;
+            
             updateDbStats();
             dbModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -1882,6 +2941,8 @@
         }
         
         function restoreBackup(event) {
+            if (!authSystem.checkAccess()) return;
+            
             const file = event.target.files[0];
             if (!file) return;
             
@@ -1919,6 +2980,8 @@
         }
         
         function clearDatabase() {
+            if (!authSystem.checkAccess()) return;
+            
             if (!confirm('This will delete ALL games and music. Are you sure?')) return;
             
             db.saveGames([]);
@@ -1945,17 +3008,171 @@
             shareModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             updateSiteUrl();
+            
+            smartLinkContainer.style.display = 'none';
+            cloudLinkInfo.style.display = 'none';
+            directLinkLoading.style.display = 'none';
         }
         
         function closeShareModalFunc() {
             shareModal.style.display = 'none';
             document.body.style.overflow = 'auto';
+            qrContainer.style.display = 'none';
         }
         
         function updateSiteUrl() {
-            if (siteUrlInput) {
-                siteUrlInput.value = window.location.origin + window.location.pathname;
-            }
+            siteUrlInput.value = window.location.origin + window.location.pathname;
+        }
+        
+        function copySiteUrl() {
+            siteUrlInput.select();
+            siteUrlInput.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(siteUrlInput.value).then(() => {
+                showToast('Link copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                document.execCommand('copy');
+                showToast('Link copied to clipboard!');
+            });
+        }
+        
+        function shareViaWhatsApp() {
+            const url = encodeURIComponent(siteUrlInput.value);
+            const text = encodeURIComponent("Check out this awesome gaming collection on Xtream Games!");
+            window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
+            showToast('Opening WhatsApp...');
+        }
+        
+        function shareViaTelegram() {
+            const url = encodeURIComponent(siteUrlInput.value);
+            const text = encodeURIComponent("Check out this awesome gaming collection on Xtream Games!");
+            window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
+            showToast('Opening Telegram...');
+        }
+        
+        function shareViaEmail() {
+            const subject = encodeURIComponent("Xtream Games - Awesome Gaming Collection");
+            const body = encodeURIComponent(`Check out this awesome gaming collection!\n\n${siteUrlInput.value}\n\nYou can view and manage your favorite games with videos, music, and download links.`);
+            window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
+            showToast('Opening email client...');
+        }
+        
+        function downloadSiteFiles() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Xtream-Games.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Site downloaded as HTML file!');
+        }
+        
+        function generateQRCode() {
+            qrContainer.style.display = 'block';
+            qrCode.innerHTML = '';
+            
+            QRCode.toCanvas(qrCode, siteUrlInput.value, {
+                width: 200,
+                height: 200,
+                margin: 1,
+                color: {
+                    dark: '#0066ff',
+                    light: '#0f1524'
+                }
+            }, function(error) {
+                if (error) {
+                    qrCode.innerHTML = '<p style="color: red;">Error generating QR code</p>';
+                    console.error(error);
+                }
+            });
+            
+            qrContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function exportGamesData() {
+            const backup = {
+                version: '3.0',
+                timestamp: new Date().toISOString(),
+                games: db.getGames(),
+                music: db.getMusicPlaylist(),
+                settings: db.getSettings()
+            };
+            
+            const dataStr = JSON.stringify(backup, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'xtream-games-backup.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Games data exported successfully!');
+        }
+        
+        function importGamesData(event) {
+            if (!authSystem.checkAccess()) return;
+            
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (data.games && Array.isArray(data.games)) {
+                        const choice = confirm('Import games data? This will replace your current games.\n\nClick OK to replace, Cancel to merge.');
+                        
+                        if (choice) {
+                            db.saveGames(data.games);
+                        } else {
+                            const existingGames = db.getGames();
+                            const existingIds = existingGames.map(g => g.id);
+                            const newGames = data.games.filter(g => !existingIds.includes(g.id));
+                            const mergedGames = [...existingGames, ...newGames];
+                            db.saveGames(mergedGames);
+                        }
+                        
+                        loadGames();
+                        
+                        if (data.music && Array.isArray(data.music)) {
+                            const existingMusic = db.getMusicPlaylist();
+                            const mergedMusic = [...existingMusic, ...data.music];
+                            const uniqueUrls = new Set();
+                            const filteredMusic = mergedMusic.filter(track => {
+                                if (uniqueUrls.has(track.url)) return false;
+                                uniqueUrls.add(track.url);
+                                return true;
+                            });
+                            
+                            db.saveMusicPlaylist(filteredMusic);
+                            renderMusicPlaylist();
+                        }
+                        
+                        showToast('Games data imported successfully!');
+                        closeShareModalFunc();
+                        updateDatabaseStatus();
+                    } else {
+                        showToast('Invalid data format', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                    showToast('Error importing data', 'error');
+                }
+            };
+            
+            reader.readAsText(file);
+            importFile.value = '';
         }
         
         function showToast(message, type = 'success') {
@@ -2046,6 +3263,8 @@
         }
         
         function removeMusicFromPlaylist(index) {
+            if (!authSystem.checkAccess()) return;
+            
             if (!confirm('Remove this track from playlist?')) return;
             
             musicPlaylist.splice(index, 1);
@@ -2077,6 +3296,8 @@
                 return;
             }
             
+            const isAuthenticated = authSystem.isAuthenticated();
+            
             musicPlaylist.forEach((track, index) => {
                 const musicItem = document.createElement('div');
                 musicItem.className = `music-item ${index === currentMusicIndex && isPlaying ? 'music-item-playing' : ''}`;
@@ -2087,7 +3308,7 @@
                     </div>
                     <div>
                         ${index === currentMusicIndex && isPlaying ? '<i class="fas fa-volume-up" style="color: #3399ff;"></i>' : ''}
-                        ${isAdminLoggedIn ? 
+                        ${isAuthenticated ? 
                             `<button onclick="removeMusicFromPlaylist(${index})" style="background: rgba(255,50,50,0.7); color: white; border: none; padding: 5px 10px; margin-left: 10px; cursor: pointer; border-radius: 0;">Remove</button>` 
                             : ''}
                     </div>
@@ -2178,6 +3399,11 @@
             if (games.length === 0) {
                 emptyState.style.display = 'block';
                 gamesGrid.innerHTML = '';
+                emptyState.innerHTML = `
+                    <i class="fas fa-gamepad"></i>
+                    <h3>No Games Added Yet</h3>
+                    <p>Login as admin to add games</p>
+                `;
                 return;
             }
             
@@ -2189,17 +3415,35 @@
         function renderGames() {
             gamesGrid.innerHTML = '';
             
-            games.forEach(game => {
+            const gamesToDisplay = isSearching ? db.searchGames(currentSearchQuery) : games;
+            
+            if (gamesToDisplay.length === 0) {
+                emptyState.style.display = 'block';
+                gamesGrid.innerHTML = '';
+                emptyState.innerHTML = `
+                    <i class="fas fa-gamepad"></i>
+                    <h3>No Games Found</h3>
+                    <p>Try a different search or clear your search</p>
+                `;
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            const isAuthenticated = authSystem.isAuthenticated();
+            
+            gamesToDisplay.forEach(game => {
                 const gameCard = document.createElement('div');
                 gameCard.className = 'game-card';
                 
                 gameCard.innerHTML = `
                     <div class="game-image-container">
                         <img src="${game.mainImage}" alt="${game.name}" class="game-image" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1080&h=1920&fit=crop'">
+                        
                         <div class="game-overlay">
                             <div class="game-title">${game.name}</div>
                             <div class="game-actions">
-                                ${isAdminLoggedIn ? `
+                                ${isAuthenticated ? `
                                     <button class="action-btn edit-btn" onclick="editGame(${game.id})">
                                         <i class="fas fa-edit"></i> Edit
                                     </button>
@@ -2210,7 +3454,7 @@
                                 <button class="action-btn share-game-btn" onclick="shareGame(${game.id})">
                                     <i class="fas fa-share"></i> Share
                                 </button>
-                                ${isAdminLoggedIn ? `
+                                ${isAuthenticated ? `
                                     <button class="action-btn delete-btn" onclick="deleteGame(${game.id})">
                                         <i class="fas fa-trash"></i> Delete
                                     </button>
@@ -2330,6 +3574,8 @@
                 `;
             }
             
+            const isAuthenticated = authSystem.isAuthenticated();
+            
             modalBody.innerHTML = `
                 <div class="game-details-header">
                     <img src="${game.mainImage}" alt="${game.name}" class="detail-cover" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1080&h=1920&fit=crop'">
@@ -2337,7 +3583,7 @@
                         <h2 class="game-details-title">${game.name}</h2>
                         <div class="game-details-description">${game.description || 'No description available.'}</div>
                         <div class="game-actions">
-                            ${isAdminLoggedIn ? `
+                            ${isAuthenticated ? `
                                 <button class="action-btn edit-btn" onclick="editGame(${game.id}); closeMediaModal();">
                                     <i class="fas fa-edit"></i> Edit Game
                                 </button>
@@ -2393,7 +3639,7 @@
         }
         
         function editGame(id) {
-            if (!checkAdminAccess('edit games')) return;
+            if (!authSystem.checkAccess()) return;
             
             const game = games.find(g => g.id === id);
             if (!game) return;
@@ -2414,7 +3660,7 @@
         function saveGame(e) {
             e.preventDefault();
             
-            if (!checkAdminAccess('save games')) return;
+            if (!authSystem.checkAccess()) return;
             
             if (!gameNameInput.value.trim() || !mainImageInput.value.trim()) {
                 alert('Please enter game name and main image URL');
@@ -2446,7 +3692,7 @@
         
         // Delete Game
         function deleteGame(id) {
-            if (!checkAdminAccess('delete games')) return;
+            if (!authSystem.checkAccess()) return;
             
             if (!confirm('Are you sure you want to delete this game?')) return;
             
@@ -2463,8 +3709,6 @@
         
         // Media Management
         function addMediaItem() {
-            if (!checkAdminAccess('add media')) return;
-            
             const url = mediaUrlInput.value.trim();
             if (!url) {
                 alert('Please enter a media URL');
@@ -2477,7 +3721,7 @@
         }
         
         function removeMediaItem(index) {
-            if (!checkAdminAccess('remove media')) return;
+            if (!authSystem.checkAccess()) return;
             
             mediaItems.splice(index, 1);
             renderMediaPreview();
@@ -2491,6 +3735,8 @@
                 return;
             }
             
+            const isAuthenticated = authSystem.isAuthenticated();
+            
             mediaItems.forEach((url, index) => {
                 const mediaItem = document.createElement('div');
                 mediaItem.className = 'media-item';
@@ -2502,7 +3748,7 @@
                             <i class="fab fa-youtube" style="font-size: 2rem; color: #ff0000;"></i>
                             <div style="font-size: 0.8rem; margin-top: 5px;">YouTube Video</div>
                             <span class="media-type-badge">Video</span>
-                            ${isAdminLoggedIn ? 
+                            ${isAuthenticated ? 
                                 `<button onclick="removeMediaItem(${index})" style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 0;">X</button>` 
                                 : ''}
                         </div>
@@ -2513,16 +3759,16 @@
                             <i class="fas fa-video" style="font-size: 2rem; color: #0066ff;"></i>
                             <div style="font-size: 0.8rem; margin-top: 5px;">Video File</div>
                             <span class="media-type-badge">Video</span>
-                            ${isAdminLoggedIn ? 
+                            ${isAuthenticated ? 
                                 `<button onclick="removeMediaItem(${index})" style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 0;">X</button>` 
                                 : ''}
                         </div>
                     `;
                 } else {
                     mediaItem.innerHTML = `
-                        <img src="${url}" alt="Media ${index + 1}" onerror="this.parentElement.innerHTML='<i class=\'fas fa-image\' style=\'font-size: 2rem; color: #777;\'></i><span class=\'media-type-badge\'>Image</span>${isAdminLoggedIn ? '<button onclick=\'removeMediaItem(' + index + ')\' style=\'position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 0;\'>X</button>' : ''}'">
+                        <img src="${url}" alt="Media ${index + 1}" onerror="this.parentElement.innerHTML='<i class=\'fas fa-image\' style=\'font-size: 2rem; color: #777;\'></i><span class=\'media-type-badge\'>Image</span>${isAuthenticated ? '<button onclick=\'removeMediaItem(' + index + ')\' style=\'position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 0;\'>X</button>' : ''}'">
                         <span class="media-type-badge">Image</span>
-                        ${isAdminLoggedIn ? 
+                        ${isAuthenticated ? 
                             `<button onclick="removeMediaItem(${index})" style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 0;">X</button>` 
                             : ''}
                     `;
@@ -2534,15 +3780,13 @@
         
         // Download Links Management
         function addDownloadLink() {
-            if (!checkAdminAccess('add download links')) return;
-            
             const linkId = Date.now();
             downloadLinkItems.push({ id: linkId, name: '', url: '' });
             renderDownloadLinks();
         }
         
         function removeDownloadLink(id) {
-            if (!checkAdminAccess('remove download links')) return;
+            if (!authSystem.checkAccess()) return;
             
             downloadLinkItems = downloadLinkItems.filter(link => link.id !== id);
             renderDownloadLinks();
@@ -2563,15 +3807,17 @@
                 return;
             }
             
+            const isAuthenticated = authSystem.isAuthenticated();
+            
             downloadLinkItems.forEach(link => {
                 const linkItem = document.createElement('div');
                 linkItem.className = 'link-item';
                 linkItem.innerHTML = `
                     <input type="text" placeholder="Link name (e.g., Part 1)" value="${link.name}" 
-                           ${!isAdminLoggedIn ? 'disabled' : 'onchange="updateDownloadLink(' + link.id + ', \'name\', this.value)"'}>
+                           ${!isAuthenticated ? 'disabled' : 'onchange="updateDownloadLink(' + link.id + ', \'name\', this.value)"'}>
                     <input type="text" placeholder="Download URL" value="${link.url}" 
-                           ${!isAdminLoggedIn ? 'disabled' : 'onchange="updateDownloadLink(' + link.id + ', \'url\', this.value)"'}>
-                    ${isAdminLoggedIn ? 
+                           ${!isAuthenticated ? 'disabled' : 'onchange="updateDownloadLink(' + link.id + ', \'url\', this.value)"'}>
+                    ${isAuthenticated ? 
                         `<button type="button" class="remove-btn" onclick="removeDownloadLink(${link.id})">X</button>` 
                         : ''}
                 `;
