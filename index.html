@@ -181,7 +181,7 @@
         .share-modal-content {
             background-color: var(--secondary-dark);
             width: 90%;
-            max-width: 500px;
+            max-width: 550px;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
@@ -217,6 +217,8 @@
         
         .share-modal-body {
             padding: 30px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         
         .share-options {
@@ -1194,6 +1196,10 @@
                         <i class="fas fa-qrcode share-icon share-qr"></i>
                         <span>QR Code</span>
                     </div>
+                    <div class="share-option" id="shareDirect">
+                        <i class="fas fa-external-link-alt share-icon" style="color: #FF9800;"></i>
+                        <span>Direct Link</span>
+                    </div>
                 </div>
                 
                 <div class="url-container">
@@ -1206,7 +1212,42 @@
                     <div class="qr-code" id="qrCode"></div>
                 </div>
                 
-                <div class="export-options">
+                <!-- ========== [قسمت جدید: لینک مستقیم با Base64] ========== -->
+                <div class="export-options" style="margin-top: 30px;">
+                    <h4>Direct Game Sharing (Base64):</h4>
+                    <p style="color: var(--text-secondary); margin: 10px 0; font-size: 0.9rem;">
+                        Create a link that includes ALL your games. Anyone with this link will see your entire collection instantly.
+                    </p>
+                    <button class="export-btn" id="generateDirectLinkBtn" style="background-color: #FF9800;">
+                        <i class="fas fa-link"></i> Generate Direct Link with All Games
+                    </button>
+                    
+                    <div id="directLinkContainer" style="display: none; margin-top: 20px;">
+                        <h4>Your Direct Link:</h4>
+                        <div class="url-container">
+                            <input type="text" readonly class="url-input" id="directLinkInput" value="">
+                            <button class="copy-btn" id="copyDirectLinkBtn">Copy</button>
+                        </div>
+                        <div style="margin-top: 15px; padding: 10px; background-color: var(--card-bg); border-radius: 8px;">
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 5px 0;">
+                                <i class="fas fa-info-circle" style="color: #3399ff;"></i>
+                                Share this link with anyone - they will see all your games immediately!
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background-color: rgba(19, 26, 45, 0.5); border-radius: 8px;">
+                        <h4>How it works:</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                            1. Click "Generate Direct Link"<br>
+                            2. Copy the generated link<br>
+                            3. Share it anywhere (WhatsApp, Telegram, etc.)<br>
+                            4. When someone opens the link, they see ALL your games automatically
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="export-options" style="margin-top: 30px;">
                     <h4>Export Your Data:</h4>
                     <button class="export-btn" id="exportGamesBtn">
                         <i class="fas fa-file-export"></i> Export Games Data (JSON)
@@ -1594,6 +1635,11 @@
         const exportGamesBtn = document.getElementById('exportGamesBtn');
         const importGamesBtn = document.getElementById('importGamesBtn');
         const importFile = document.getElementById('importFile');
+        const shareDirect = document.getElementById('shareDirect');
+        const generateDirectLinkBtn = document.getElementById('generateDirectLinkBtn');
+        const directLinkContainer = document.getElementById('directLinkContainer');
+        const directLinkInput = document.getElementById('directLinkInput');
+        const copyDirectLinkBtn = document.getElementById('copyDirectLinkBtn');
         
         // Toast Notification
         const toast = document.getElementById('toast');
@@ -1621,6 +1667,112 @@
         // Initialize Database Manager
         const db = new DatabaseManager();
         
+        // ==================== [قسمت جدید: Base64 Direct Link] ====================
+        
+        // تابع برای ایجاد لینک مستقیم با Base64
+        function createDirectLinkWithAllGames() {
+            try {
+                // گرفتن تمام داده‌های بازی‌ها
+                const gamesData = db.getGames();
+                const musicData = db.getMusicPlaylist();
+                
+                // ساخت آبجکت داده برای کدگذاری
+                const exportData = {
+                    version: '2.0',
+                    timestamp: new Date().toISOString(),
+                    games: gamesData,
+                    music: musicData,
+                    info: `Xtream Games Collection - ${gamesData.length} games`
+                };
+                
+                // تبدیل به JSON
+                const jsonString = JSON.stringify(exportData);
+                
+                // کدگذاری Base64 (با encodeURIComponent برای امن‌تر شدن)
+                const base64String = btoa(encodeURIComponent(jsonString));
+                
+                // ایجاد لینک
+                const currentUrl = window.location.origin + window.location.pathname;
+                const directLink = `${currentUrl}?data=${base64String}`;
+                
+                return directLink;
+            } catch (error) {
+                console.error('Error creating direct link:', error);
+                showToast('Error creating direct link', 'error');
+                return null;
+            }
+        }
+        
+        // تابع برای لود بازی‌ها از لینک Base64
+        function loadGamesFromDirectLink() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const base64Data = urlParams.get('data');
+                
+                if (!base64Data) return;
+                
+                // دیکد کردن Base64
+                const jsonString = decodeURIComponent(atob(base64Data));
+                const importData = JSON.parse(jsonString);
+                
+                if (!importData.games || !Array.isArray(importData.games)) {
+                    showToast('Invalid game data in link', 'error');
+                    return;
+                }
+                
+                // پرسش از کاربر
+                const shouldReplace = confirm(
+                    `This link contains ${importData.games.length} games.\n\n` +
+                    `Click OK to replace your current games.\n` +
+                    `Click Cancel to merge with your existing games.`
+                );
+                
+                if (shouldReplace) {
+                    // جایگزینی کامل
+                    db.saveGames(importData.games);
+                } else {
+                    // ادغام با بازی‌های موجود
+                    const existingGames = db.getGames();
+                    const existingIds = existingGames.map(g => g.id);
+                    const newGames = importData.games.filter(g => !existingIds.includes(g.id));
+                    const mergedGames = [...existingGames, ...newGames];
+                    db.saveGames(mergedGames);
+                }
+                
+                // لود موزیک اگر موجود باشد
+                if (importData.music && Array.isArray(importData.music)) {
+                    const existingMusic = db.getMusicPlaylist();
+                    const mergedMusic = [...existingMusic, ...importData.music];
+                    
+                    // حذف duplicate بر اساس URL
+                    const uniqueUrls = new Set();
+                    const filteredMusic = mergedMusic.filter(track => {
+                        if (uniqueUrls.has(track.url)) return false;
+                        uniqueUrls.add(track.url);
+                        return true;
+                    });
+                    
+                    db.saveMusicPlaylist(filteredMusic);
+                }
+                
+                // رفرش صفحه
+                loadGames();
+                loadMusicPlaylist();
+                updateDatabaseStatus();
+                
+                showToast(`Loaded ${importData.games.length} games from direct link!`);
+                
+                // پاک کردن پارامتر از URL (اختیاری)
+                // window.history.replaceState({}, document.title, window.location.pathname);
+                
+            } catch (error) {
+                console.error('Error loading from direct link:', error);
+                showToast('Invalid or corrupted game data', 'error');
+            }
+        }
+        
+        // ==================== [پایان قسمت جدید] ====================
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadGames();
@@ -1629,6 +1781,9 @@
             loadDefaultMusic();
             updateSiteUrl();
             updateDatabaseStatus();
+            
+            // لود بازی‌ها از لینک Base64 اگر موجود باشد
+            loadGamesFromDirectLink();
             
             // Load sample games if empty
             if (db.getGames().length === 0) {
@@ -1689,6 +1844,49 @@
             exportGamesBtn.addEventListener('click', exportGamesData);
             importGamesBtn.addEventListener('click', () => importFile.click());
             importFile.addEventListener('change', importGamesData);
+            
+            // Direct link functionality
+            shareDirect.addEventListener('click', function() {
+                const directLink = createDirectLinkWithAllGames();
+                if (directLink) {
+                    // نمایش لینک در باکس
+                    directLinkInput.value = directLink;
+                    directLinkContainer.style.display = 'block';
+                    directLinkInput.select();
+                    
+                    // اسکرول به باکس لینک
+                    directLinkContainer.scrollIntoView({behavior: 'smooth'});
+                    
+                    showToast('Direct link generated! Copy and share it.');
+                }
+            });
+            
+            generateDirectLinkBtn.addEventListener('click', function() {
+                const directLink = createDirectLinkWithAllGames();
+                if (directLink) {
+                    // نمایش لینک در باکس
+                    directLinkInput.value = directLink;
+                    directLinkContainer.style.display = 'block';
+                    directLinkInput.select();
+                    
+                    // اسکرول به باکس لینک
+                    directLinkContainer.scrollIntoView({behavior: 'smooth'});
+                    
+                    showToast('Direct link generated! Copy and share it.');
+                }
+            });
+            
+            copyDirectLinkBtn.addEventListener('click', function() {
+                if (directLinkInput.value) {
+                    directLinkInput.select();
+                    navigator.clipboard.writeText(directLinkInput.value).then(() => {
+                        showToast('Direct link copied! Share it with anyone.');
+                    }).catch(err => {
+                        console.error('Failed to copy:', err);
+                        showToast('Failed to copy link', 'error');
+                    });
+                }
+            });
             
             // Music player controls
             playPauseBtn.addEventListener('click', togglePlayPause);
@@ -1837,6 +2035,9 @@
             shareModal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
             updateSiteUrl();
+            
+            // مخفی کردن باکس لینک مستقیم هنگام باز شدن مودال
+            directLinkContainer.style.display = 'none';
         }
         
         function closeShareModalFunc() {
@@ -1846,7 +2047,7 @@
         }
         
         function updateSiteUrl() {
-            siteUrlInput.value = "https://arianxenon.github.io/xtreamgames";
+            siteUrlInput.value = window.location.origin + window.location.pathname;
         }
         
         function copySiteUrl() {
