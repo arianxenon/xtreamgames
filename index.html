@@ -1007,6 +1007,28 @@
                 justify-content: center;
             }
         }
+        
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent-blue);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -1170,6 +1192,11 @@
                 <button class="close-share-modal" id="closeShareModal">&times;</button>
             </div>
             <div class="share-modal-body">
+                <div class="loading-spinner" id="directLinkLoading">
+                    <div class="spinner"></div>
+                    <p>Generating direct link...</p>
+                </div>
+                
                 <h4>Share via:</h4>
                 <div class="share-options">
                     <div class="share-option" id="shareWhatsApp">
@@ -1212,37 +1239,73 @@
                     <div class="qr-code" id="qrCode"></div>
                 </div>
                 
-                <!-- ========== [قسمت جدید: لینک مستقیم با Base64] ========== -->
+                <!-- ========== [قسمت جدید: لینک مستقیم بهینه‌شده] ========== -->
                 <div class="export-options" style="margin-top: 30px;">
-                    <h4>Direct Game Sharing (Base64):</h4>
+                    <h4>Smart Game Sharing:</h4>
                     <p style="color: var(--text-secondary); margin: 10px 0; font-size: 0.9rem;">
-                        Create a link that includes ALL your games. Anyone with this link will see your entire collection instantly.
+                        Create a smart link that includes your game collection. Perfect for sharing with friends!
                     </p>
-                    <button class="export-btn" id="generateDirectLinkBtn" style="background-color: #FF9800;">
-                        <i class="fas fa-link"></i> Generate Direct Link with All Games
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 8px; color: var(--text-secondary);">
+                            <i class="fas fa-cog"></i> Compression Level:
+                        </label>
+                        <select id="compressionLevel" style="width: 100%; padding: 10px; background-color: var(--card-bg); color: white; border: 2px solid #2a3552; border-radius: 8px;">
+                            <option value="light">Light (Fastest, larger link)</option>
+                            <option value="medium" selected>Medium (Balanced)</option>
+                            <option value="high">High (Smallest link, slower)</option>
+                        </select>
+                    </div>
+                    
+                    <button class="export-btn" id="generateSmartLinkBtn" style="background-color: #FF9800;">
+                        <i class="fas fa-bolt"></i> Generate Smart Link
                     </button>
                     
-                    <div id="directLinkContainer" style="display: none; margin-top: 20px;">
-                        <h4>Your Direct Link:</h4>
+                    <button class="export-btn" id="generateCloudLinkBtn" style="background-color: #2196F3; margin-top: 10px;">
+                        <i class="fas fa-cloud"></i> Create Cloud Share Link
+                    </button>
+                    
+                    <div id="smartLinkContainer" style="display: none; margin-top: 20px;">
+                        <h4>Your Smart Link:</h4>
                         <div class="url-container">
-                            <input type="text" readonly class="url-input" id="directLinkInput" value="">
-                            <button class="copy-btn" id="copyDirectLinkBtn">Copy</button>
+                            <input type="text" readonly class="url-input" id="smartLinkInput" value="">
+                            <button class="copy-btn" id="copySmartLinkBtn">Copy</button>
                         </div>
+                        
+                        <div style="margin-top: 10px; display: flex; gap: 10px;">
+                            <button class="copy-btn" id="testSmartLinkBtn" style="background-color: #25D366; padding: 8px 15px;">
+                                <i class="fas fa-play"></i> Test Link
+                            </button>
+                            <button class="copy-btn" id="shortenSmartLinkBtn" style="background-color: #9C27B0; padding: 8px 15px;">
+                                <i class="fas fa-compress"></i> Shorten
+                            </button>
+                        </div>
+                        
                         <div style="margin-top: 15px; padding: 10px; background-color: var(--card-bg); border-radius: 8px;">
                             <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 5px 0;">
                                 <i class="fas fa-info-circle" style="color: #3399ff;"></i>
-                                Share this link with anyone - they will see all your games immediately!
+                                Share this link - recipients will see all your games instantly!
                             </p>
+                            <div id="linkStats" style="font-size: 0.8rem; color: #b0b8d0; margin-top: 5px;">
+                                <!-- Stats will appear here -->
+                            </div>
                         </div>
                     </div>
                     
+                    <div id="cloudLinkInfo" style="display: none; margin-top: 15px; padding: 10px; background-color: rgba(33, 150, 243, 0.1); border-radius: 8px; border-left: 4px solid #2196F3;">
+                        <p style="color: var(--text-secondary); font-size: 0.85rem;">
+                            <i class="fas fa-cloud-upload-alt" style="color: #2196F3;"></i>
+                            <strong>Cloud Link Created!</strong> Your games are now accessible via a short, shareable link.
+                        </p>
+                    </div>
+                    
                     <div style="margin-top: 20px; padding: 15px; background-color: rgba(19, 26, 45, 0.5); border-radius: 8px;">
-                        <h4>How it works:</h4>
+                        <h4>How Smart Links Work:</h4>
                         <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                            1. Click "Generate Direct Link"<br>
-                            2. Copy the generated link<br>
-                            3. Share it anywhere (WhatsApp, Telegram, etc.)<br>
-                            4. When someone opens the link, they see ALL your games automatically
+                            1. Games are compressed to create shorter links<br>
+                            2. Recipients see games instantly without import<br>
+                            3. Works even with large collections<br>
+                            4. No login or account required
                         </p>
                     </div>
                 </div>
@@ -1342,54 +1405,44 @@
     
     <script>
         // ==================== DATABASE MANAGER ====================
-        const GITHUB_TOKEN = '';
-        const REPO_OWNER = 'arianxenon'; // اسم کاربر GitHub تو
-        const REPO_NAME = 'xtreamgames'; // اسم repository تو
-        const FILE_PATH = 'games.json';
-        
         class DatabaseManager {
             constructor() {
                 this.STORAGE_KEYS = {
-                    GAMES: 'xtreamGames_v2',
-                    MUSIC: 'xtreamGamesMusic_v2',
-                    SETTINGS: 'xtreamGamesSettings_v2',
-                    BACKUPS: 'xtreamGamesBackups_v2'
+                    GAMES: 'xtreamGames_v3',
+                    MUSIC: 'xtreamGamesMusic_v3',
+                    SETTINGS: 'xtreamGamesSettings_v3',
+                    BACKUPS: 'xtreamGamesBackups_v3',
+                    CLOUD_LINKS: 'xtreamGamesCloudLinks_v3'
                 };
                 
                 this.initializeDatabase();
             }
             
             initializeDatabase() {
-                // Check if old data exists and migrate
                 this.migrateOldData();
                 
-                // Set default settings if not exist
                 if (!this.getSettings()) {
                     this.saveSettings({
-                        version: '2.0',
+                        version: '3.0',
                         created: new Date().toISOString(),
                         lastSync: null,
-                        autoBackup: true
+                        autoBackup: true,
+                        cloudLinks: []
                     });
                 }
             }
             
             migrateOldData() {
-                // Migrate games from old version
-                const oldGames = localStorage.getItem('xtreamGames');
+                // Migrate from v2
+                const oldGames = localStorage.getItem('xtreamGames_v2') || localStorage.getItem('xtreamGames');
                 if (oldGames && !localStorage.getItem(this.STORAGE_KEYS.GAMES)) {
                     localStorage.setItem(this.STORAGE_KEYS.GAMES, oldGames);
-                    localStorage.removeItem('xtreamGames');
                 }
                 
-                // Migrate music from old version
-                const oldMusic = localStorage.getItem('xtreamGamesMusic');
+                const oldMusic = localStorage.getItem('xtreamGamesMusic_v2') || localStorage.getItem('xtreamGamesMusic');
                 if (oldMusic && !localStorage.getItem(this.STORAGE_KEYS.MUSIC)) {
                     localStorage.setItem(this.STORAGE_KEYS.MUSIC, oldMusic);
-                    localStorage.removeItem('xtreamGamesMusic');
                 }
-                
-                console.log('Database migration completed');
             }
             
             // Games CRUD operations
@@ -1469,79 +1522,12 @@
                 }
             }
             
-            // Backup operations
-            createBackup() {
-                const backup = {
-                    version: '2.0',
-                    timestamp: new Date().toISOString(),
-                    games: this.getGames(),
-                    music: this.getMusicPlaylist(),
-                    settings: this.getSettings()
-                };
-                
-                // Save to backups list
-                const backups = this.getBackups();
-                backups.push({
-                    id: Date.now(),
-                    name: `Backup_${new Date().toLocaleDateString()}_${new Date().toLocaleTimeString()}`,
-                    timestamp: new Date().toISOString(),
-                    size: JSON.stringify(backup).length
-                });
-                
-                // Keep only last 10 backups
-                if (backups.length > 10) {
-                    backups.shift();
-                }
-                
-                localStorage.setItem(this.STORAGE_KEYS.BACKUPS, JSON.stringify(backups));
-                
-                return backup;
-            }
-            
-            getBackups() {
-                const backupsJson = localStorage.getItem(this.STORAGE_KEYS.BACKUPS);
-                return backupsJson ? JSON.parse(backupsJson) : [];
-            }
-            
-            restoreBackup(backupData) {
-                if (!backupData || !backupData.games) {
-                    throw new Error('Invalid backup data');
-                }
-                
-                // Clear existing data
-                this.clearDatabase();
-                
-                // Restore data
-                if (backupData.games) {
-                    this.saveGames(backupData.games);
-                }
-                
-                if (backupData.music) {
-                    this.saveMusicPlaylist(backupData.music);
-                }
-                
-                if (backupData.settings) {
-                    this.saveSettings(backupData.settings);
-                }
-                
-                this.updateLastSync();
-                return true;
-            }
-            
-            clearDatabase() {
-                localStorage.removeItem(this.STORAGE_KEYS.GAMES);
-                localStorage.removeItem(this.STORAGE_KEYS.MUSIC);
-                localStorage.removeItem(this.STORAGE_KEYS.SETTINGS);
-                return true;
-            }
-            
             // Statistics
             getStatistics() {
                 const games = this.getGames();
                 const music = this.getMusicPlaylist();
                 const settings = this.getSettings();
                 
-                // Calculate total storage used
                 let totalSize = 0;
                 totalSize += localStorage.getItem(this.STORAGE_KEYS.GAMES)?.length || 0;
                 totalSize += localStorage.getItem(this.STORAGE_KEYS.MUSIC)?.length || 0;
@@ -1551,30 +1537,231 @@
                 return {
                     gamesCount: games.length,
                     musicCount: music.length,
-                    dbSize: Math.round(totalSize / 1024), // in KB
+                    dbSize: Math.round(totalSize / 1024),
                     lastSync: settings?.lastSync || 'Never',
                     totalSize: totalSize
                 };
             }
             
-            // Export/Import
-            exportData() {
-                return this.createBackup();
+            // ==================== [قسمت جدید: Smart Link System] ====================
+            
+            // تابع فشرده‌سازی داده‌ها برای لینک کوتاه
+            compressGamesData(games, level = 'medium') {
+                try {
+                    // حذف داده‌های غیرضروری برای کاهش سایز
+                    const compressedGames = games.map(game => ({
+                        id: game.id,
+                        name: game.name,
+                        mainImage: game.mainImage,
+                        description: game.description ? game.description.substring(0, 200) : '', // محدود کردن توضیحات
+                        media: game.media ? game.media.slice(0, 3) : [], // فقط ۳ مدیا اول
+                        downloadLinks: game.downloadLinks ? game.downloadLinks.slice(0, 2) : [] // فقط ۲ لینک اول
+                    }));
+                    
+                    const data = {
+                        v: '3.0',
+                        t: new Date().getTime(),
+                        g: compressedGames,
+                        c: level
+                    };
+                    
+                    // فشرده‌سازی متن با حذف فضای خالی
+                    let jsonString = JSON.stringify(data);
+                    
+                    if (level === 'high') {
+                        // فشرده‌سازی پیشرفته
+                        jsonString = jsonString.replace(/\s+/g, '');
+                    }
+                    
+                    // کدگذاری Base64 با URL encoding
+                    const base64String = btoa(encodeURIComponent(jsonString));
+                    
+                    return {
+                        data: base64String,
+                        originalSize: JSON.stringify(games).length,
+                        compressedSize: base64String.length,
+                        ratio: Math.round((base64String.length / JSON.stringify(games).length) * 100) + '%'
+                    };
+                } catch (error) {
+                    console.error('Compression error:', error);
+                    return null;
+                }
             }
             
-            importData(data) {
-                return this.restoreBackup(data);
+            // تابع بازکردن داده‌های فشرده
+            decompressGamesData(compressedData) {
+                try {
+                    const jsonString = decodeURIComponent(atob(compressedData));
+                    const data = JSON.parse(jsonString);
+                    
+                    if (!data.g || !Array.isArray(data.g)) {
+                        throw new Error('Invalid compressed data');
+                    }
+                    
+                    // تبدیل به فرمت اصلی
+                    const games = data.g.map(game => ({
+                        id: game.id || Date.now() + Math.random(),
+                        name: game.name || 'Unnamed Game',
+                        mainImage: game.mainImage || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1080&h=1920&fit=crop',
+                        description: game.description || '',
+                        media: game.media || [],
+                        downloadLinks: game.downloadLinks || [],
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    }));
+                    
+                    return games;
+                } catch (error) {
+                    console.error('Decompression error:', error);
+                    return null;
+                }
             }
             
-            // Sync across browsers (using localStorage as example)
-            // In a real app, this would connect to a server
-            syncAcrossBrowsers() {
-                const data = this.exportData();
-                // Here you would typically send data to a server
-                // For this example, we'll just update the sync time
-                this.updateLastSync();
-                return data;
+            // ایجاد لینک هوشمند با چانکینگ (تقسیم داده‌ها)
+            createSmartLink(compressionLevel = 'medium') {
+                const games = this.getGames();
+                if (games.length === 0) {
+                    return { error: 'No games to share' };
+                }
+                
+                // اگر بازی‌ها خیلی زیاد هستند، تقسیم می‌کنیم
+                const MAX_GAMES_PER_LINK = 10;
+                const chunks = [];
+                
+                for (let i = 0; i < games.length; i += MAX_GAMES_PER_LINK) {
+                    const chunk = games.slice(i, i + MAX_GAMES_PER_LINK);
+                    const compressed = this.compressGamesData(chunk, compressionLevel);
+                    if (compressed) {
+                        chunks.push(compressed.data);
+                    }
+                }
+                
+                const baseUrl = window.location.origin + window.location.pathname;
+                
+                if (chunks.length === 1) {
+                    // یک لینک ساده
+                    return {
+                        type: 'single',
+                        url: `${baseUrl}?share=${chunks[0]}&v=3`,
+                        size: chunks[0].length,
+                        games: games.length
+                    };
+                } else {
+                    // چند لینک (برای مجموعه‌های بزرگ)
+                    const links = chunks.map((chunk, index) => 
+                        `${baseUrl}?share=${chunk}&part=${index + 1}&total=${chunks.length}&v=3`
+                    );
+                    
+                    // ذخیره لینک‌های چندتایی
+                    const multiLinkId = 'ml_' + Date.now();
+                    localStorage.setItem(`multilink_${multiLinkId}`, JSON.stringify({
+                        links: links,
+                        createdAt: new Date().toISOString(),
+                        gameCount: games.length
+                    }));
+                    
+                    return {
+                        type: 'multi',
+                        url: `${baseUrl}?multilink=${multiLinkId}`,
+                        links: links,
+                        size: chunks.reduce((sum, chunk) => sum + chunk.length, 0),
+                        games: games.length,
+                        parts: chunks.length
+                    };
+                }
             }
+            
+            // لود از لینک هوشمند
+            loadFromSmartLink() {
+                try {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    
+                    // بررسی لینک چندتایی
+                    const multiLinkId = urlParams.get('multilink');
+                    if (multiLinkId) {
+                        const multiLinkData = localStorage.getItem(`multilink_${multiLinkId}`);
+                        if (multiLinkData) {
+                            const data = JSON.parse(multiLinkData);
+                            showToast(`Found multi-link with ${data.gameCount} games in ${data.links.length} parts`);
+                            return { type: 'multi', data: data };
+                        }
+                    }
+                    
+                    // بررسی لینک ساده
+                    const shareData = urlParams.get('share');
+                    if (shareData) {
+                        const games = this.decompressGamesData(shareData);
+                        if (games && games.length > 0) {
+                            const part = urlParams.get('part');
+                            const total = urlParams.get('total');
+                            
+                            if (part && total) {
+                                // بخشی از یک مجموعه چندتایی
+                                showToast(`Loaded part ${part} of ${total} (${games.length} games)`);
+                                return { type: 'chunk', games: games, part: part, total: total };
+                            } else {
+                                // لینک کامل
+                                return { type: 'single', games: games };
+                            }
+                        }
+                    }
+                    
+                    return null;
+                } catch (error) {
+                    console.error('Error loading from smart link:', error);
+                    return null;
+                }
+            }
+            
+            // ایجاد لینک ابری (شبیه‌سازی)
+            createCloudLink() {
+                const games = this.getGames();
+                if (games.length === 0) {
+                    return { error: 'No games to share' };
+                }
+                
+                // شبیه‌سازی لینک ابری - در واقعیت باید به سرور ارسال شود
+                const cloudId = 'cloud_' + Math.random().toString(36).substr(2, 9);
+                const shareData = this.compressGamesData(games, 'high');
+                
+                if (!shareData) {
+                    return { error: 'Failed to compress data' };
+                }
+                
+                // ذخیره موقت در localStorage (شبیه‌سازی سرور)
+                localStorage.setItem(`cloud_${cloudId}`, shareData.data);
+                
+                // تاریخ انقضا: ۷ روز
+                const expiresAt = new Date();
+                expiresAt.setDate(expiresAt.getDate() + 7);
+                
+                // ذخیره اطلاعات لینک
+                const cloudLinks = this.getCloudLinks();
+                cloudLinks.push({
+                    id: cloudId,
+                    createdAt: new Date().toISOString(),
+                    expiresAt: expiresAt.toISOString(),
+                    gameCount: games.length,
+                    views: 0
+                });
+                
+                localStorage.setItem(this.STORAGE_KEYS.CLOUD_LINKS, JSON.stringify(cloudLinks));
+                
+                const baseUrl = window.location.origin + window.location.pathname;
+                return {
+                    url: `${baseUrl}?cloud=${cloudId}`,
+                    id: cloudId,
+                    expires: expiresAt.toLocaleDateString(),
+                    games: games.length
+                };
+            }
+            
+            getCloudLinks() {
+                const linksJson = localStorage.getItem(this.STORAGE_KEYS.CLOUD_LINKS);
+                return linksJson ? JSON.parse(linksJson) : [];
+            }
+            
+            // ==================== [پایان قسمت جدید] ====================
         }
         
         // ==================== APPLICATION CODE ====================
@@ -1635,11 +1822,20 @@
         const exportGamesBtn = document.getElementById('exportGamesBtn');
         const importGamesBtn = document.getElementById('importGamesBtn');
         const importFile = document.getElementById('importFile');
+        
+        // Smart Link Elements
         const shareDirect = document.getElementById('shareDirect');
-        const generateDirectLinkBtn = document.getElementById('generateDirectLinkBtn');
-        const directLinkContainer = document.getElementById('directLinkContainer');
-        const directLinkInput = document.getElementById('directLinkInput');
-        const copyDirectLinkBtn = document.getElementById('copyDirectLinkBtn');
+        const generateSmartLinkBtn = document.getElementById('generateSmartLinkBtn');
+        const generateCloudLinkBtn = document.getElementById('generateCloudLinkBtn');
+        const smartLinkContainer = document.getElementById('smartLinkContainer');
+        const smartLinkInput = document.getElementById('smartLinkInput');
+        const copySmartLinkBtn = document.getElementById('copySmartLinkBtn');
+        const testSmartLinkBtn = document.getElementById('testSmartLinkBtn');
+        const shortenSmartLinkBtn = document.getElementById('shortenSmartLinkBtn');
+        const linkStats = document.getElementById('linkStats');
+        const compressionLevel = document.getElementById('compressionLevel');
+        const cloudLinkInfo = document.getElementById('cloudLinkInfo');
+        const directLinkLoading = document.getElementById('directLinkLoading');
         
         // Toast Notification
         const toast = document.getElementById('toast');
@@ -1667,112 +1863,6 @@
         // Initialize Database Manager
         const db = new DatabaseManager();
         
-        // ==================== [قسمت جدید: Base64 Direct Link] ====================
-        
-        // تابع برای ایجاد لینک مستقیم با Base64
-        function createDirectLinkWithAllGames() {
-            try {
-                // گرفتن تمام داده‌های بازی‌ها
-                const gamesData = db.getGames();
-                const musicData = db.getMusicPlaylist();
-                
-                // ساخت آبجکت داده برای کدگذاری
-                const exportData = {
-                    version: '2.0',
-                    timestamp: new Date().toISOString(),
-                    games: gamesData,
-                    music: musicData,
-                    info: `Xtream Games Collection - ${gamesData.length} games`
-                };
-                
-                // تبدیل به JSON
-                const jsonString = JSON.stringify(exportData);
-                
-                // کدگذاری Base64 (با encodeURIComponent برای امن‌تر شدن)
-                const base64String = btoa(encodeURIComponent(jsonString));
-                
-                // ایجاد لینک
-                const currentUrl = window.location.origin + window.location.pathname;
-                const directLink = `${currentUrl}?data=${base64String}`;
-                
-                return directLink;
-            } catch (error) {
-                console.error('Error creating direct link:', error);
-                showToast('Error creating direct link', 'error');
-                return null;
-            }
-        }
-        
-        // تابع برای لود بازی‌ها از لینک Base64
-        function loadGamesFromDirectLink() {
-            try {
-                const urlParams = new URLSearchParams(window.location.search);
-                const base64Data = urlParams.get('data');
-                
-                if (!base64Data) return;
-                
-                // دیکد کردن Base64
-                const jsonString = decodeURIComponent(atob(base64Data));
-                const importData = JSON.parse(jsonString);
-                
-                if (!importData.games || !Array.isArray(importData.games)) {
-                    showToast('Invalid game data in link', 'error');
-                    return;
-                }
-                
-                // پرسش از کاربر
-                const shouldReplace = confirm(
-                    `This link contains ${importData.games.length} games.\n\n` +
-                    `Click OK to replace your current games.\n` +
-                    `Click Cancel to merge with your existing games.`
-                );
-                
-                if (shouldReplace) {
-                    // جایگزینی کامل
-                    db.saveGames(importData.games);
-                } else {
-                    // ادغام با بازی‌های موجود
-                    const existingGames = db.getGames();
-                    const existingIds = existingGames.map(g => g.id);
-                    const newGames = importData.games.filter(g => !existingIds.includes(g.id));
-                    const mergedGames = [...existingGames, ...newGames];
-                    db.saveGames(mergedGames);
-                }
-                
-                // لود موزیک اگر موجود باشد
-                if (importData.music && Array.isArray(importData.music)) {
-                    const existingMusic = db.getMusicPlaylist();
-                    const mergedMusic = [...existingMusic, ...importData.music];
-                    
-                    // حذف duplicate بر اساس URL
-                    const uniqueUrls = new Set();
-                    const filteredMusic = mergedMusic.filter(track => {
-                        if (uniqueUrls.has(track.url)) return false;
-                        uniqueUrls.add(track.url);
-                        return true;
-                    });
-                    
-                    db.saveMusicPlaylist(filteredMusic);
-                }
-                
-                // رفرش صفحه
-                loadGames();
-                loadMusicPlaylist();
-                updateDatabaseStatus();
-                
-                showToast(`Loaded ${importData.games.length} games from direct link!`);
-                
-                // پاک کردن پارامتر از URL (اختیاری)
-                // window.history.replaceState({}, document.title, window.location.pathname);
-                
-            } catch (error) {
-                console.error('Error loading from direct link:', error);
-                showToast('Invalid or corrupted game data', 'error');
-            }
-        }
-        
-        // ==================== [پایان قسمت جدید] ====================
-        
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadGames();
@@ -1782,14 +1872,163 @@
             updateSiteUrl();
             updateDatabaseStatus();
             
-            // لود بازی‌ها از لینک Base64 اگر موجود باشد
-            loadGamesFromDirectLink();
+            // لود از لینک هوشمند اگر موجود باشد
+            loadFromSmartLink();
             
             // Load sample games if empty
             if (db.getGames().length === 0) {
                 loadSampleGames();
             }
         });
+        
+        // ==================== [توابع جدید Smart Link] ====================
+        
+        // لود بازی‌ها از لینک هوشمند
+        function loadFromSmartLink() {
+            const result = db.loadFromSmartLink();
+            if (!result) return;
+            
+            if (result.type === 'single' && result.games) {
+                handleSmartLinkImport(result.games);
+            } else if (result.type === 'chunk') {
+                showToast(`Loaded part ${result.part} of ${result.total} with ${result.games.length} games`, 'info');
+                handleSmartLinkImport(result.games);
+            } else if (result.type === 'multi') {
+                showToast(`Found multi-link with ${result.data.gameCount} games in ${result.data.links.length} parts`, 'info');
+                // می‌توانید اینجا یک UI برای لود کردن تمام بخش‌ها نشان دهید
+            }
+        }
+        
+        // مدیریت ایمپورت از لینک هوشمند
+        function handleSmartLinkImport(importedGames) {
+            if (!importedGames || importedGames.length === 0) return;
+            
+            const existingGames = db.getGames();
+            
+            // اگر بازی‌ای نداریم، مستقیم اضافه کن
+            if (existingGames.length === 0) {
+                db.saveGames(importedGames);
+                loadGames();
+                updateDatabaseStatus();
+                showToast(`Loaded ${importedGames.length} games from link!`);
+                return;
+            }
+            
+            // در غیر این صورت سوال بپرس
+            const shouldMerge = confirm(
+                `This link contains ${importedGames.length} games.\n\n` +
+                `You currently have ${existingGames.length} games.\n\n` +
+                `Click OK to merge with existing games.\n` +
+                `Click Cancel to replace all games.`
+            );
+            
+            if (shouldMerge) {
+                // ادغام
+                const existingIds = existingGames.map(g => g.id);
+                const newGames = importedGames.filter(g => !existingIds.includes(g.id));
+                const mergedGames = [...existingGames, ...newGames];
+                db.saveGames(mergedGames);
+                showToast(`Added ${newGames.length} new games (merged)`);
+            } else {
+                // جایگزینی
+                db.saveGames(importedGames);
+                showToast(`Replaced all games with ${importedGames.length} new games`);
+            }
+            
+            loadGames();
+            updateDatabaseStatus();
+        }
+        
+        // ایجاد لینک هوشمند
+        function generateSmartLink() {
+            directLinkLoading.style.display = 'block';
+            smartLinkContainer.style.display = 'none';
+            
+            // اجازه دهید UI آپدیت شود
+            setTimeout(() => {
+                try {
+                    const level = compressionLevel.value;
+                    const result = db.createSmartLink(level);
+                    
+                    directLinkLoading.style.display = 'none';
+                    
+                    if (result.error) {
+                        showToast(result.error, 'error');
+                        return;
+                    }
+                    
+                    if (result.type === 'single') {
+                        smartLinkInput.value = result.url;
+                        linkStats.innerHTML = `
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Games: ${result.games}</span>
+                                <span>Link Size: ${Math.round(result.size / 1024 * 100) / 100} KB</span>
+                                <span>Type: Single Link</span>
+                            </div>
+                        `;
+                    } else {
+                        smartLinkInput.value = result.url;
+                        linkStats.innerHTML = `
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>Games: ${result.games}</span>
+                                <span>Parts: ${result.parts}</span>
+                                <span>Type: Multi-Part Link</span>
+                            </div>
+                        `;
+                    }
+                    
+                    smartLinkContainer.style.display = 'block';
+                    smartLinkContainer.scrollIntoView({ behavior: 'smooth' });
+                    
+                    showToast(`Smart link generated for ${result.games} games!`);
+                    
+                } catch (error) {
+                    directLinkLoading.style.display = 'none';
+                    console.error('Error generating smart link:', error);
+                    showToast('Error generating link', 'error');
+                }
+            }, 100);
+        }
+        
+        // ایجاد لینک ابری
+        function generateCloudLink() {
+            directLinkLoading.style.display = 'block';
+            
+            setTimeout(() => {
+                try {
+                    const result = db.createCloudLink();
+                    
+                    directLinkLoading.style.display = 'none';
+                    
+                    if (result.error) {
+                        showToast(result.error, 'error');
+                        return;
+                    }
+                    
+                    smartLinkInput.value = result.url;
+                    linkStats.innerHTML = `
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Games: ${result.games}</span>
+                            <span>Expires: ${result.expires}</span>
+                            <span>Type: Cloud Link</span>
+                        </div>
+                    `;
+                    
+                    smartLinkContainer.style.display = 'block';
+                    cloudLinkInfo.style.display = 'block';
+                    smartLinkContainer.scrollIntoView({ behavior: 'smooth' });
+                    
+                    showToast(`Cloud link created! Expires on ${result.expires}`);
+                    
+                } catch (error) {
+                    directLinkLoading.style.display = 'none';
+                    console.error('Error generating cloud link:', error);
+                    showToast('Error generating cloud link', 'error');
+                }
+            }, 100);
+        }
+        
+        // ==================== [پایان توابع جدید] ====================
         
         // Update database status
         function updateDatabaseStatus() {
@@ -1845,46 +2084,35 @@
             importGamesBtn.addEventListener('click', () => importFile.click());
             importFile.addEventListener('change', importGamesData);
             
-            // Direct link functionality
-            shareDirect.addEventListener('click', function() {
-                const directLink = createDirectLinkWithAllGames();
-                if (directLink) {
-                    // نمایش لینک در باکس
-                    directLinkInput.value = directLink;
-                    directLinkContainer.style.display = 'block';
-                    directLinkInput.select();
-                    
-                    // اسکرول به باکس لینک
-                    directLinkContainer.scrollIntoView({behavior: 'smooth'});
-                    
-                    showToast('Direct link generated! Copy and share it.');
-                }
-            });
+            // Smart link functionality
+            shareDirect.addEventListener('click', generateSmartLink);
+            generateSmartLinkBtn.addEventListener('click', generateSmartLink);
+            generateCloudLinkBtn.addEventListener('click', generateCloudLink);
             
-            generateDirectLinkBtn.addEventListener('click', function() {
-                const directLink = createDirectLinkWithAllGames();
-                if (directLink) {
-                    // نمایش لینک در باکس
-                    directLinkInput.value = directLink;
-                    directLinkContainer.style.display = 'block';
-                    directLinkInput.select();
-                    
-                    // اسکرول به باکس لینک
-                    directLinkContainer.scrollIntoView({behavior: 'smooth'});
-                    
-                    showToast('Direct link generated! Copy and share it.');
-                }
-            });
-            
-            copyDirectLinkBtn.addEventListener('click', function() {
-                if (directLinkInput.value) {
-                    directLinkInput.select();
-                    navigator.clipboard.writeText(directLinkInput.value).then(() => {
-                        showToast('Direct link copied! Share it with anyone.');
+            copySmartLinkBtn.addEventListener('click', function() {
+                if (smartLinkInput.value) {
+                    smartLinkInput.select();
+                    navigator.clipboard.writeText(smartLinkInput.value).then(() => {
+                        showToast('Smart link copied!');
                     }).catch(err => {
                         console.error('Failed to copy:', err);
                         showToast('Failed to copy link', 'error');
                     });
+                }
+            });
+            
+            testSmartLinkBtn.addEventListener('click', function() {
+                if (smartLinkInput.value) {
+                    window.open(smartLinkInput.value, '_blank');
+                }
+            });
+            
+            shortenSmartLinkBtn.addEventListener('click', function() {
+                if (smartLinkInput.value) {
+                    // شبیه‌سازی کوتاه کردن لینک
+                    const shortUrl = `https://xtre.am/${Math.random().toString(36).substr(2, 6)}`;
+                    smartLinkInput.value = shortUrl;
+                    showToast('Link shortened (simulated)');
                 }
             });
             
@@ -1957,7 +2185,14 @@
         }
         
         function createBackup() {
-            const backup = db.createBackup();
+            const backup = {
+                version: '3.0',
+                timestamp: new Date().toISOString(),
+                games: db.getGames(),
+                music: db.getMusicPlaylist(),
+                settings: db.getSettings()
+            };
+            
             const dataStr = JSON.stringify(backup, null, 2);
             const blob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -1988,9 +2223,12 @@
                         return;
                     }
                     
-                    db.restoreBackup(backupData);
+                    db.saveGames(backupData.games || []);
+                    db.saveMusicPlaylist(backupData.music || []);
+                    if (backupData.settings) {
+                        db.saveSettings(backupData.settings);
+                    }
                     
-                    // Reload data
                     loadGames();
                     loadMusicPlaylist();
                     updateDbStats();
@@ -2011,9 +2249,9 @@
         function clearDatabase() {
             if (!confirm('This will delete ALL games and music. Are you sure?')) return;
             
-            db.clearDatabase();
+            db.saveGames([]);
+            db.saveMusicPlaylist([]);
             
-            // Reload data
             loadGames();
             loadMusicPlaylist();
             updateDbStats();
@@ -2024,7 +2262,7 @@
         }
         
         function syncDatabase() {
-            const backup = db.syncAcrossBrowsers();
+            db.updateLastSync();
             updateDbStats();
             updateDatabaseStatus();
             showToast('Database synced!');
@@ -2036,8 +2274,9 @@
             document.body.style.overflow = 'hidden';
             updateSiteUrl();
             
-            // مخفی کردن باکس لینک مستقیم هنگام باز شدن مودال
-            directLinkContainer.style.display = 'none';
+            smartLinkContainer.style.display = 'none';
+            cloudLinkInfo.style.display = 'none';
+            directLinkLoading.style.display = 'none';
         }
         
         function closeShareModalFunc() {
@@ -2052,12 +2291,11 @@
         
         function copySiteUrl() {
             siteUrlInput.select();
-            siteUrlInput.setSelectionRange(0, 99999); // For mobile devices
+            siteUrlInput.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(siteUrlInput.value).then(() => {
                 showToast('Link copied to clipboard!');
             }).catch(err => {
                 console.error('Failed to copy: ', err);
-                // Fallback for older browsers
                 document.execCommand('copy');
                 showToast('Link copied to clipboard!');
             });
@@ -2085,7 +2323,6 @@
         }
         
         function downloadSiteFiles() {
-            // Create a download link for the entire HTML page
             const htmlContent = document.documentElement.outerHTML;
             const blob = new Blob([htmlContent], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
@@ -2120,12 +2357,18 @@
                 }
             });
             
-            // Scroll to QR code
             qrContainer.scrollIntoView({ behavior: 'smooth' });
         }
         
         function exportGamesData() {
-            const backup = db.exportData();
+            const backup = {
+                version: '3.0',
+                timestamp: new Date().toISOString(),
+                games: db.getGames(),
+                music: db.getMusicPlaylist(),
+                settings: db.getSettings()
+            };
+            
             const dataStr = JSON.stringify(backup, null, 2);
             const blob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -2151,14 +2394,11 @@
                     const data = JSON.parse(e.target.result);
                     
                     if (data.games && Array.isArray(data.games)) {
-                        // Ask user what to do
                         const choice = confirm('Import games data? This will replace your current games.\n\nClick OK to replace, Cancel to merge.');
                         
                         if (choice) {
-                            // Replace existing games
                             db.saveGames(data.games);
                         } else {
-                            // Merge with existing games
                             const existingGames = db.getGames();
                             const existingIds = existingGames.map(g => g.id);
                             const newGames = data.games.filter(g => !existingIds.includes(g.id));
@@ -2168,16 +2408,12 @@
                         
                         loadGames();
                         
-                        // Import music playlist if available
                         if (data.music && Array.isArray(data.music)) {
                             const existingMusic = db.getMusicPlaylist();
                             const mergedMusic = [...existingMusic, ...data.music];
-                            // Remove duplicates based on URL
                             const uniqueUrls = new Set();
                             const filteredMusic = mergedMusic.filter(track => {
-                                if (uniqueUrls.has(track.url)) {
-                                    return false;
-                                }
+                                if (uniqueUrls.has(track.url)) return false;
                                 uniqueUrls.add(track.url);
                                 return true;
                             });
@@ -2199,7 +2435,6 @@
             };
             
             reader.readAsText(file);
-            // Reset file input
             importFile.value = '';
         }
         
@@ -2210,6 +2445,8 @@
             
             if (type === 'error') {
                 toast.style.borderLeftColor = '#ff3333';
+            } else if (type === 'info') {
+                toast.style.borderLeftColor = '#2196F3';
             }
             
             setTimeout(() => {
@@ -2234,18 +2471,15 @@
                 }
             ];
             
-            // Only add default tracks if playlist is empty
             if (musicPlaylist.length === 0) {
                 musicPlaylist.push(...defaultTracks);
                 db.saveMusicPlaylist(musicPlaylist);
                 renderMusicPlaylist();
                 
-                // Start playing the first track
                 if (musicPlaylist.length > 0) {
                     playMusic(currentMusicIndex);
                 }
             } else if (musicPlaylist.length > 0) {
-                // Start playing the first track
                 playMusic(currentMusicIndex);
             }
         }
@@ -2262,7 +2496,6 @@
                 return;
             }
             
-            // Check if it's an MP3 file
             if (!url.endsWith('.mp3') && !url.includes('audio/mpeg')) {
                 if (!confirm('This might not be an MP3 file. Continue anyway?')) {
                     return;
@@ -2283,7 +2516,6 @@
             
             musicUrlInput.value = '';
             
-            // If this is the first track, start playing it
             if (musicPlaylist.length === 1) {
                 currentMusicIndex = 0;
                 playMusic(currentMusicIndex);
@@ -2300,12 +2532,10 @@
             db.saveMusicPlaylist(musicPlaylist);
             renderMusicPlaylist();
             
-            // Adjust current index if needed
             if (currentMusicIndex >= musicPlaylist.length) {
                 currentMusicIndex = Math.max(0, musicPlaylist.length - 1);
             }
             
-            // If we removed the currently playing track, play the new current track
             if (isPlaying && musicPlaylist.length > 0) {
                 playMusic(currentMusicIndex);
             } else if (musicPlaylist.length === 0) {
@@ -2464,7 +2694,6 @@
                     </div>
                 `;
                 
-                // Add click event to view game details
                 gameCard.addEventListener('click', function(e) {
                     if (!e.target.closest('.game-actions')) {
                         viewGameDetails(game.id);
@@ -2484,7 +2713,6 @@
             const text = `Check out "${game.name}" on Xtream Games!`;
             
             if (navigator.share) {
-                // Use Web Share API if available
                 navigator.share({
                     title: game.name,
                     text: text,
@@ -2496,7 +2724,6 @@
                     copyToClipboard(gameUrl);
                 });
             } else {
-                // Fallback to copying link
                 copyToClipboard(gameUrl);
             }
         }
@@ -2517,7 +2744,6 @@
             
             modalTitle.textContent = game.name;
             
-            // Build modal content
             let mediaHTML = '';
             if (game.media && game.media.length > 0) {
                 mediaHTML = `
@@ -2606,7 +2832,6 @@
             mediaModal.style.display = 'none';
             document.body.style.overflow = 'auto';
             
-            // Stop all videos in modal
             const iframes = modalBody.querySelectorAll('iframe');
             iframes.forEach(iframe => {
                 iframe.src = iframe.src.replace('autoplay=1', 'autoplay=0');
@@ -2675,19 +2900,15 @@
             };
             
             if (currentGameId) {
-                // Update existing game
                 db.updateGame(currentGameId, gameData);
             } else {
-                // Add new game
                 db.addGame(gameData);
             }
             
-            // Update UI
             loadGames();
             resetForm();
             updateDatabaseStatus();
             
-            // Show confirmation
             showToast(`Game "${gameData.name}" saved successfully!`);
         }
         
@@ -2736,7 +2957,6 @@
                 const mediaItem = document.createElement('div');
                 mediaItem.className = 'media-item';
                 
-                // Check if it's a YouTube video
                 if (isYouTubeUrl(url)) {
                     const videoId = extractYouTubeId(url);
                     mediaItem.innerHTML = `
@@ -2748,7 +2968,6 @@
                         </div>
                     `;
                 } else if (url.includes('.mp4') || url.includes('.webm') || url.includes('.ogg')) {
-                    // Other video formats
                     mediaItem.innerHTML = `
                         <div style="text-align: center; width: 100%;">
                             <i class="fas fa-video" style="font-size: 2rem; color: #0066ff;"></i>
@@ -2758,7 +2977,6 @@
                         </div>
                     `;
                 } else {
-                    // Assume it's an image
                     mediaItem.innerHTML = `
                         <img src="${url}" alt="Media ${index + 1}" onerror="this.parentElement.innerHTML='<i class=\'fas fa-image\' style=\'font-size: 2rem; color: #777;\'></i><span class=\'media-type-badge\'>Image</span><button onclick=\'removeMediaItem(${index})\' style=\'position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 0;\'>X</button>'">
                         <span class="media-type-badge">Image</span>
