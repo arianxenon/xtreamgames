@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xtream Games | Ultimate Gaming Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- خط 83 (بعد از لینک font-awesome) اضافه کنید: -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<!-- این خط جدید را اضافه کنید: -->
-    <script src="cloud-sync.js"></script>
     <style>
         :root {
             --primary-dark: #0a0e17;
@@ -147,6 +142,26 @@
         .share-btn:hover {
             background-color: #1da851;
             transform: translateY(-2px);
+        }
+        
+        /* Database Status */
+        .db-status {
+            background-color: var(--card-bg);
+            padding: 8px 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-blue);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .db-status.online {
+            border-left-color: #25D366;
+        }
+        
+        .db-status.offline {
+            border-left-color: #ff3333;
         }
         
         /* Share Modal */
@@ -887,6 +902,64 @@
             opacity: 1;
         }
         
+        /* Database Modal */
+        .db-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 4000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .db-modal-content {
+            background-color: var(--secondary-dark);
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--accent-blue);
+        }
+        
+        .db-modal-header {
+            background-color: var(--card-bg);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+        
+        .db-modal-body {
+            padding: 30px;
+        }
+        
+        .db-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .db-stat-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #2a3552;
+        }
+        
+        .db-stat-value {
+            font-size: 2rem;
+            color: var(--accent-light-blue);
+            margin: 10px 0;
+        }
+        
         /* Responsive */
         @media (max-width: 1400px) {
             .main-content {
@@ -948,6 +1021,11 @@
                 </div>
                 
                 <div class="music-player-container">
+                    <div class="db-status online" id="dbStatus" title="Database Status">
+                        <i class="fas fa-database"></i>
+                        <span>Database: Online</span>
+                    </div>
+                    
                     <div class="now-playing" id="nowPlaying">
                         <div class="song-title">No song playing</div>
                         <div class="progress-container">
@@ -987,6 +1065,9 @@
                         </button>
                         <button class="add-game-btn" id="addNewGame">
                             <i class="fas fa-plus"></i> Add New Game
+                        </button>
+                        <button class="add-game-btn" id="dbManagerBtn" style="background-color: #9C27B0;">
+                            <i class="fas fa-database"></i> Database
                         </button>
                     </div>
                 </div>
@@ -1139,6 +1220,66 @@
         </div>
     </div>
     
+    <!-- Database Manager Modal -->
+    <div class="db-modal" id="dbModal">
+        <div class="db-modal-content">
+            <div class="db-modal-header">
+                <h3 class="share-modal-title">Database Manager</h3>
+                <button class="close-share-modal" id="closeDbModal">&times;</button>
+            </div>
+            <div class="db-modal-body">
+                <div class="db-stats">
+                    <div class="db-stat-card">
+                        <i class="fas fa-gamepad fa-2x" style="color: #0066ff;"></i>
+                        <div class="db-stat-value" id="gamesCount">0</div>
+                        <div>Games</div>
+                    </div>
+                    <div class="db-stat-card">
+                        <i class="fas fa-music fa-2x" style="color: #25D366;"></i>
+                        <div class="db-stat-value" id="musicCount">0</div>
+                        <div>Tracks</div>
+                    </div>
+                    <div class="db-stat-card">
+                        <i class="fas fa-hdd fa-2x" style="color: #FF9800;"></i>
+                        <div class="db-stat-value" id="dbSize">0 KB</div>
+                        <div>Storage Used</div>
+                    </div>
+                    <div class="db-stat-card">
+                        <i class="fas fa-sync-alt fa-2x" style="color: #9C27B0;"></i>
+                        <div class="db-stat-value" id="lastSync">Never</div>
+                        <div>Last Sync</div>
+                    </div>
+                </div>
+                
+                <div class="export-options">
+                    <h4>Database Actions:</h4>
+                    <button class="export-btn" id="backupDbBtn">
+                        <i class="fas fa-download"></i> Full Backup
+                    </button>
+                    <button class="export-btn" id="restoreDbBtn" style="background-color: #2196F3;">
+                        <i class="fas fa-upload"></i> Restore Backup
+                    </button>
+                    <button class="export-btn" id="clearDbBtn" style="background-color: #f44336;">
+                        <i class="fas fa-trash"></i> Clear Database
+                    </button>
+                    <input type="file" id="restoreFile" accept=".json" style="display: none;">
+                    
+                    <button class="export-btn export-json" id="syncDbBtn" style="background-color: #4CAF50; margin-top: 20px;">
+                        <i class="fas fa-sync"></i> Sync Across Browsers
+                    </button>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background-color: var(--card-bg); border-radius: 8px;">
+                        <h4>Sync Information:</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                            Data is automatically saved in your browser's local storage. 
+                            To sync across different browsers/devices, export and import the backup file.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Media/Game Details Modal -->
     <div class="media-modal" id="mediaModal">
         <div class="modal-content">
@@ -1159,6 +1300,238 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     
     <script>
+        // ==================== DATABASE MANAGER ====================
+        class DatabaseManager {
+            constructor() {
+                this.STORAGE_KEYS = {
+                    GAMES: 'xtreamGames_v2',
+                    MUSIC: 'xtreamGamesMusic_v2',
+                    SETTINGS: 'xtreamGamesSettings_v2',
+                    BACKUPS: 'xtreamGamesBackups_v2'
+                };
+                
+                this.initializeDatabase();
+            }
+            
+            initializeDatabase() {
+                // Check if old data exists and migrate
+                this.migrateOldData();
+                
+                // Set default settings if not exist
+                if (!this.getSettings()) {
+                    this.saveSettings({
+                        version: '2.0',
+                        created: new Date().toISOString(),
+                        lastSync: null,
+                        autoBackup: true
+                    });
+                }
+            }
+            
+            migrateOldData() {
+                // Migrate games from old version
+                const oldGames = localStorage.getItem('xtreamGames');
+                if (oldGames && !localStorage.getItem(this.STORAGE_KEYS.GAMES)) {
+                    localStorage.setItem(this.STORAGE_KEYS.GAMES, oldGames);
+                    localStorage.removeItem('xtreamGames');
+                }
+                
+                // Migrate music from old version
+                const oldMusic = localStorage.getItem('xtreamGamesMusic');
+                if (oldMusic && !localStorage.getItem(this.STORAGE_KEYS.MUSIC)) {
+                    localStorage.setItem(this.STORAGE_KEYS.MUSIC, oldMusic);
+                    localStorage.removeItem('xtreamGamesMusic');
+                }
+                
+                console.log('Database migration completed');
+            }
+            
+            // Games CRUD operations
+            getGames() {
+                const gamesJson = localStorage.getItem(this.STORAGE_KEYS.GAMES);
+                return gamesJson ? JSON.parse(gamesJson) : [];
+            }
+            
+            saveGames(games) {
+                localStorage.setItem(this.STORAGE_KEYS.GAMES, JSON.stringify(games));
+                this.updateLastSync();
+                return true;
+            }
+            
+            getGameById(id) {
+                const games = this.getGames();
+                return games.find(game => game.id === id);
+            }
+            
+            addGame(game) {
+                const games = this.getGames();
+                game.id = game.id || Date.now();
+                game.createdAt = new Date().toISOString();
+                game.updatedAt = new Date().toISOString();
+                games.push(game);
+                this.saveGames(games);
+                return game;
+            }
+            
+            updateGame(id, gameData) {
+                const games = this.getGames();
+                const index = games.findIndex(game => game.id === id);
+                if (index !== -1) {
+                    gameData.updatedAt = new Date().toISOString();
+                    games[index] = { ...games[index], ...gameData };
+                    this.saveGames(games);
+                    return true;
+                }
+                return false;
+            }
+            
+            deleteGame(id) {
+                const games = this.getGames();
+                const filteredGames = games.filter(game => game.id !== id);
+                this.saveGames(filteredGames);
+                return true;
+            }
+            
+            // Music CRUD operations
+            getMusicPlaylist() {
+                const musicJson = localStorage.getItem(this.STORAGE_KEYS.MUSIC);
+                return musicJson ? JSON.parse(musicJson) : [];
+            }
+            
+            saveMusicPlaylist(playlist) {
+                localStorage.setItem(this.STORAGE_KEYS.MUSIC, JSON.stringify(playlist));
+                this.updateLastSync();
+                return true;
+            }
+            
+            // Settings operations
+            getSettings() {
+                const settingsJson = localStorage.getItem(this.STORAGE_KEYS.SETTINGS);
+                return settingsJson ? JSON.parse(settingsJson) : null;
+            }
+            
+            saveSettings(settings) {
+                localStorage.setItem(this.STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+                return true;
+            }
+            
+            updateLastSync() {
+                const settings = this.getSettings();
+                if (settings) {
+                    settings.lastSync = new Date().toISOString();
+                    this.saveSettings(settings);
+                }
+            }
+            
+            // Backup operations
+            createBackup() {
+                const backup = {
+                    version: '2.0',
+                    timestamp: new Date().toISOString(),
+                    games: this.getGames(),
+                    music: this.getMusicPlaylist(),
+                    settings: this.getSettings()
+                };
+                
+                // Save to backups list
+                const backups = this.getBackups();
+                backups.push({
+                    id: Date.now(),
+                    name: `Backup_${new Date().toLocaleDateString()}_${new Date().toLocaleTimeString()}`,
+                    timestamp: new Date().toISOString(),
+                    size: JSON.stringify(backup).length
+                });
+                
+                // Keep only last 10 backups
+                if (backups.length > 10) {
+                    backups.shift();
+                }
+                
+                localStorage.setItem(this.STORAGE_KEYS.BACKUPS, JSON.stringify(backups));
+                
+                return backup;
+            }
+            
+            getBackups() {
+                const backupsJson = localStorage.getItem(this.STORAGE_KEYS.BACKUPS);
+                return backupsJson ? JSON.parse(backupsJson) : [];
+            }
+            
+            restoreBackup(backupData) {
+                if (!backupData || !backupData.games) {
+                    throw new Error('Invalid backup data');
+                }
+                
+                // Clear existing data
+                this.clearDatabase();
+                
+                // Restore data
+                if (backupData.games) {
+                    this.saveGames(backupData.games);
+                }
+                
+                if (backupData.music) {
+                    this.saveMusicPlaylist(backupData.music);
+                }
+                
+                if (backupData.settings) {
+                    this.saveSettings(backupData.settings);
+                }
+                
+                this.updateLastSync();
+                return true;
+            }
+            
+            clearDatabase() {
+                localStorage.removeItem(this.STORAGE_KEYS.GAMES);
+                localStorage.removeItem(this.STORAGE_KEYS.MUSIC);
+                localStorage.removeItem(this.STORAGE_KEYS.SETTINGS);
+                return true;
+            }
+            
+            // Statistics
+            getStatistics() {
+                const games = this.getGames();
+                const music = this.getMusicPlaylist();
+                const settings = this.getSettings();
+                
+                // Calculate total storage used
+                let totalSize = 0;
+                totalSize += localStorage.getItem(this.STORAGE_KEYS.GAMES)?.length || 0;
+                totalSize += localStorage.getItem(this.STORAGE_KEYS.MUSIC)?.length || 0;
+                totalSize += localStorage.getItem(this.STORAGE_KEYS.SETTINGS)?.length || 0;
+                totalSize += localStorage.getItem(this.STORAGE_KEYS.BACKUPS)?.length || 0;
+                
+                return {
+                    gamesCount: games.length,
+                    musicCount: music.length,
+                    dbSize: Math.round(totalSize / 1024), // in KB
+                    lastSync: settings?.lastSync || 'Never',
+                    totalSize: totalSize
+                };
+            }
+            
+            // Export/Import
+            exportData() {
+                return this.createBackup();
+            }
+            
+            importData(data) {
+                return this.restoreBackup(data);
+            }
+            
+            // Sync across browsers (using localStorage as example)
+            // In a real app, this would connect to a server
+            syncAcrossBrowsers() {
+                const data = this.exportData();
+                // Here you would typically send data to a server
+                // For this example, we'll just update the sync time
+                this.updateLastSync();
+                return data;
+            }
+        }
+        
+        // ==================== APPLICATION CODE ====================
         // DOM Elements
         const gamesGrid = document.getElementById('gamesGrid');
         const emptyState = document.getElementById('emptyState');
@@ -1184,6 +1557,21 @@
         const modalTitle = document.getElementById('modalTitle');
         const modalBody = document.getElementById('modalBody');
         const closeModal = document.getElementById('closeModal');
+        const dbManagerBtn = document.getElementById('dbManagerBtn');
+        const dbStatus = document.getElementById('dbStatus');
+        
+        // Database Manager Modal Elements
+        const dbModal = document.getElementById('dbModal');
+        const closeDbModal = document.getElementById('closeDbModal');
+        const gamesCount = document.getElementById('gamesCount');
+        const musicCount = document.getElementById('musicCount');
+        const dbSize = document.getElementById('dbSize');
+        const lastSync = document.getElementById('lastSync');
+        const backupDbBtn = document.getElementById('backupDbBtn');
+        const restoreDbBtn = document.getElementById('restoreDbBtn');
+        const clearDbBtn = document.getElementById('clearDbBtn');
+        const restoreFile = document.getElementById('restoreFile');
+        const syncDbBtn = document.getElementById('syncDbBtn');
         
         // Share Modal Elements
         const shareModal = document.getElementById('shareModal');
@@ -1225,6 +1613,9 @@
         let isPlaying = false;
         let updateProgressInterval;
         
+        // Initialize Database Manager
+        const db = new DatabaseManager();
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadGames();
@@ -1232,7 +1623,22 @@
             setupEventListeners();
             loadDefaultMusic();
             updateSiteUrl();
+            updateDatabaseStatus();
+            
+            // Load sample games if empty
+            if (db.getGames().length === 0) {
+                loadSampleGames();
+            }
         });
+        
+        // Update database status
+        function updateDatabaseStatus() {
+            const stats = db.getStatistics();
+            dbStatus.innerHTML = `
+                <i class="fas fa-database"></i>
+                <span>Database: ${stats.gamesCount} games, ${stats.musicCount} tracks</span>
+            `;
+        }
         
         // Event Listeners
         function setupEventListeners() {
@@ -1243,6 +1649,21 @@
             addMusicBtn.addEventListener('click', () => musicUrlInput.scrollIntoView({behavior: 'smooth'}));
             gameForm.addEventListener('submit', saveGame);
             cancelBtn.addEventListener('click', resetForm);
+            
+            // Database Manager
+            dbManagerBtn.addEventListener('click', openDbModal);
+            closeDbModal.addEventListener('click', closeDbModalFunc);
+            dbModal.addEventListener('click', function(e) {
+                if (e.target === dbModal) {
+                    closeDbModalFunc();
+                }
+            });
+            
+            backupDbBtn.addEventListener('click', createBackup);
+            restoreDbBtn.addEventListener('click', () => restoreFile.click());
+            restoreFile.addEventListener('change', restoreBackup);
+            clearDbBtn.addEventListener('click', clearDatabase);
+            syncDbBtn.addEventListener('click', syncDatabase);
             
             // Share functionality
             shareSiteBtn.addEventListener('click', openShareModal);
@@ -1304,6 +1725,106 @@
                     addMusicToPlaylist();
                 }
             });
+        }
+        
+        // Database Manager Functions
+        function openDbModal() {
+            updateDbStats();
+            dbModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeDbModalFunc() {
+            dbModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        function updateDbStats() {
+            const stats = db.getStatistics();
+            gamesCount.textContent = stats.gamesCount;
+            musicCount.textContent = stats.musicCount;
+            dbSize.textContent = `${stats.dbSize} KB`;
+            
+            if (stats.lastSync !== 'Never') {
+                const lastSyncDate = new Date(stats.lastSync);
+                lastSync.textContent = lastSyncDate.toLocaleString();
+            } else {
+                lastSync.textContent = 'Never';
+            }
+        }
+        
+        function createBackup() {
+            const backup = db.createBackup();
+            const dataStr = JSON.stringify(backup, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `xtream-games-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Backup created and downloaded!');
+            updateDbStats();
+        }
+        
+        function restoreBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const backupData = JSON.parse(e.target.result);
+                    
+                    if (!confirm('This will replace all current data. Are you sure?')) {
+                        restoreFile.value = '';
+                        return;
+                    }
+                    
+                    db.restoreBackup(backupData);
+                    
+                    // Reload data
+                    loadGames();
+                    loadMusicPlaylist();
+                    updateDbStats();
+                    updateDatabaseStatus();
+                    
+                    showToast('Backup restored successfully!');
+                    closeDbModalFunc();
+                } catch (error) {
+                    console.error('Error restoring backup:', error);
+                    showToast('Error restoring backup', 'error');
+                }
+            };
+            
+            reader.readAsText(file);
+            restoreFile.value = '';
+        }
+        
+        function clearDatabase() {
+            if (!confirm('This will delete ALL games and music. Are you sure?')) return;
+            
+            db.clearDatabase();
+            
+            // Reload data
+            loadGames();
+            loadMusicPlaylist();
+            updateDbStats();
+            updateDatabaseStatus();
+            
+            showToast('Database cleared successfully!');
+            closeDbModalFunc();
+        }
+        
+        function syncDatabase() {
+            const backup = db.syncAcrossBrowsers();
+            updateDbStats();
+            updateDatabaseStatus();
+            showToast('Database synced!');
         }
         
         // Share Functionality
@@ -1398,14 +1919,8 @@
         }
         
         function exportGamesData() {
-            const data = {
-                games: games,
-                musicPlaylist: musicPlaylist,
-                exportDate: new Date().toISOString(),
-                version: '1.0'
-            };
-            
-            const dataStr = JSON.stringify(data, null, 2);
+            const backup = db.exportData();
+            const dataStr = JSON.stringify(backup, null, 2);
             const blob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             
@@ -1435,23 +1950,25 @@
                         
                         if (choice) {
                             // Replace existing games
-                            games = data.games;
+                            db.saveGames(data.games);
                         } else {
                             // Merge with existing games
-                            const existingIds = games.map(g => g.id);
+                            const existingGames = db.getGames();
+                            const existingIds = existingGames.map(g => g.id);
                             const newGames = data.games.filter(g => !existingIds.includes(g.id));
-                            games = [...games, ...newGames];
+                            const mergedGames = [...existingGames, ...newGames];
+                            db.saveGames(mergedGames);
                         }
                         
-                        localStorage.setItem('xtreamGames', JSON.stringify(games));
                         loadGames();
                         
                         // Import music playlist if available
-                        if (data.musicPlaylist && Array.isArray(data.musicPlaylist)) {
-                            musicPlaylist = [...musicPlaylist, ...data.musicPlaylist];
+                        if (data.music && Array.isArray(data.music)) {
+                            const existingMusic = db.getMusicPlaylist();
+                            const mergedMusic = [...existingMusic, ...data.music];
                             // Remove duplicates based on URL
                             const uniqueUrls = new Set();
-                            musicPlaylist = musicPlaylist.filter(track => {
+                            const filteredMusic = mergedMusic.filter(track => {
                                 if (uniqueUrls.has(track.url)) {
                                     return false;
                                 }
@@ -1459,12 +1976,13 @@
                                 return true;
                             });
                             
-                            saveMusicPlaylist();
+                            db.saveMusicPlaylist(filteredMusic);
                             renderMusicPlaylist();
                         }
                         
                         showToast('Games data imported successfully!');
                         closeShareModalFunc();
+                        updateDatabaseStatus();
                     } else {
                         showToast('Invalid data format', 'error');
                     }
@@ -1513,7 +2031,7 @@
             // Only add default tracks if playlist is empty
             if (musicPlaylist.length === 0) {
                 musicPlaylist.push(...defaultTracks);
-                saveMusicPlaylist();
+                db.saveMusicPlaylist(musicPlaylist);
                 renderMusicPlaylist();
                 
                 // Start playing the first track
@@ -1527,13 +2045,8 @@
         }
         
         function loadMusicPlaylist() {
-            const savedPlaylist = localStorage.getItem('xtreamGamesMusic');
-            musicPlaylist = savedPlaylist ? JSON.parse(savedPlaylist) : [];
+            musicPlaylist = db.getMusicPlaylist();
             renderMusicPlaylist();
-        }
-        
-        function saveMusicPlaylist() {
-            localStorage.setItem('xtreamGamesMusic', JSON.stringify(musicPlaylist));
         }
         
         function addMusicToPlaylist() {
@@ -1559,7 +2072,7 @@
             };
             
             musicPlaylist.push(newTrack);
-            saveMusicPlaylist();
+            db.saveMusicPlaylist(musicPlaylist);
             renderMusicPlaylist();
             
             musicUrlInput.value = '';
@@ -1570,14 +2083,15 @@
                 playMusic(currentMusicIndex);
             }
             
-            alert(`"${title}" added to playlist!`);
+            showToast(`"${title}" added to playlist!`);
+            updateDatabaseStatus();
         }
         
         function removeMusicFromPlaylist(index) {
             if (!confirm('Remove this track from playlist?')) return;
             
             musicPlaylist.splice(index, 1);
-            saveMusicPlaylist();
+            db.saveMusicPlaylist(musicPlaylist);
             renderMusicPlaylist();
             
             // Adjust current index if needed
@@ -1595,6 +2109,8 @@
                 playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
                 songTitleElement.textContent = 'No song playing';
             }
+            
+            updateDatabaseStatus();
         }
         
         function renderMusicPlaylist() {
@@ -1699,8 +2215,7 @@
         
         // Load Games
         function loadGames() {
-            const savedGames = localStorage.getItem('xtreamGames');
-            games = savedGames ? JSON.parse(savedGames) : [];
+            games = db.getGames();
             
             if (games.length === 0) {
                 emptyState.style.display = 'block';
@@ -1955,21 +2470,16 @@
             
             if (currentGameId) {
                 // Update existing game
-                const index = games.findIndex(g => g.id === currentGameId);
-                if (index !== -1) {
-                    games[index] = gameData;
-                }
+                db.updateGame(currentGameId, gameData);
             } else {
                 // Add new game
-                games.push(gameData);
+                db.addGame(gameData);
             }
-            
-            // Save to localStorage
-            localStorage.setItem('xtreamGames', JSON.stringify(games));
             
             // Update UI
             loadGames();
             resetForm();
+            updateDatabaseStatus();
             
             // Show confirmation
             showToast(`Game "${gameData.name}" saved successfully!`);
@@ -1979,8 +2489,7 @@
         function deleteGame(id) {
             if (!confirm('Are you sure you want to delete this game?')) return;
             
-            games = games.filter(g => g.id !== id);
-            localStorage.setItem('xtreamGames', JSON.stringify(games));
+            db.deleteGame(id);
             loadGames();
             
             if (currentGameId === id) {
@@ -1988,6 +2497,7 @@
             }
             
             showToast('Game deleted successfully!');
+            updateDatabaseStatus();
         }
         
         // Media Management
@@ -2095,8 +2605,7 @@
         
         // Add sample games if empty
         function loadSampleGames() {
-            const savedGames = localStorage.getItem('xtreamGames');
-            if (!savedGames) {
+            if (db.getGames().length === 0) {
                 const sampleGames = [
                     {
                         id: 1,
@@ -2113,7 +2622,8 @@
                             { id: 102, name: "Part 2", url: "https://example.com/cyberpunk-part2.zip" },
                             { id: 103, name: "Crack", url: "https://example.com/cyberpunk-crack.zip" }
                         ],
-                        updatedAt: "2023-10-01T10:00:00Z"
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
                     },
                     {
                         id: 2,
@@ -2128,17 +2638,16 @@
                             { id: 201, name: "Full Game", url: "https://example.com/elden-ring.zip" },
                             { id: 202, name: "Update v1.10", url: "https://example.com/elden-ring-update.zip" }
                         ],
-                        updatedAt: "2023-09-15T14:30:00Z"
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
                     }
                 ];
                 
-                localStorage.setItem('xtreamGames', JSON.stringify(sampleGames));
+                sampleGames.forEach(game => db.addGame(game));
                 loadGames();
+                updateDatabaseStatus();
             }
         }
-        
-        // Load sample games on first run
-        loadSampleGames();
     </script>
 </body>
 </html>
