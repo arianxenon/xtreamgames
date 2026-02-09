@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xtream Games | Ultimate Gaming Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-dark: #0a0e17;
+            --secondary-dark: #0f1524;
+            --accent-blue: #0066ff;
+            --accent-light-blue: #3399ff;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8d0;
+            --shadow-color: rgba(0, 0, 0, 0.7);
+            --card-bg: #131a2d;
+            --player-bg: rgba(15, 21, 36, 0.95);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--primary-dark);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--secondary-dark);
+            padding: 20px 0;
+            border-bottom: 2px solid var(--accent-blue);
+            box-shadow: 0 5px 15px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--accent-blue), var(--accent-light-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(0, 102, 255, 0.3);
+        }
+        
+        /* Music Player in Header */
+        .music-player-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .music-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .music-btn {
+            background-color: var(--card-bg);
+            border: 2px solid var(--accent-blue);
+            border-radius: 8px;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--accent-light-blue);
+            font-size: 1.2rem;
+        }
+        
+        .music-btn:hover {
+            background-color: var(--accent-blue);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .volume-slider {
+            width: 100px;
+        }
+        
+        .now-playing {
+            background-color: var(--card-bg);
+            padding: 8px 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-blue);
+            font-size: 0.9rem;
+            min-width: 200px;
+        }
+        
+        .song-title {
+            font-weight: 600;
+            color: var(--accent-light-blue);
+        }
+        
+        /* Share Button */
+        .share-btn {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .share-btn:hover {
+            background-color: #1da851;
+            transform: translateY(-2px);
+        }
+        
+        /* Share Modal */
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .share-modal-content {
+            background-color: var(--secondary-dark);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--accent-blue);
+        }
+        
+        .share-modal-header {
+            background-color: var(--card-bg);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+        
+        .share-modal-title {
+            font-size: 1.5rem;
+            color: var(--accent-light-blue);
+        }
+        
+        .close-share-modal {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-share-modal:hover {
+            color: var(--accent-blue);
+        }
+        
+        .share-modal-body {
+            padding: 30px;
+        }
+        
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .share-option {
+            background-color: var(--card-bg);
+            border: 2px solid #2a3552;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .share-option:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-5px);
+        }
+        
+        .share-icon {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .share-whatsapp {
+            color: #25D366;
+        }
+        
+        .share-telegram {
+            color: #0088cc;
+        }
+        
+        .share-email {
+            color: #EA4335;
+        }
+        
+        .share-link {
+            color: var(--accent-blue);
+        }
+        
+        .share-download {
+            color: #FF9800;
+        }
+        
+        .share-qr {
+            color: #9C27B0;
+        }
+        
+        .url-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .url-input {
+            flex: 1;
+            padding: 12px;
+            background-color: rgba(19, 26, 45, 0.7);
+            border: 2px solid #2a3552;
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        
+        .copy-btn {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background-color: var(--accent-light-blue);
+        }
+        
+        .qr-container {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+        
+        .export-options {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #2a3552;
+        }
+        
+        .export-btn {
+            width: 100%;
+            background-color: #9C27B0;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+        
+        .export-btn:hover {
+            background-color: #7B1FA2;
+        }
+        
+        .export-json {
+            background-color: #2196F3;
+        }
+        
+        .export-json:hover {
+            background-color: #1976D2;
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            gap: 30px;
+            padding: 30px 0;
+        }
+        
+        /* Games Grid */
+        .games-section {
+            flex: 1;
+        }
+        
+        .games-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .games-header h2 {
+            font-size: 2rem;
+            color: var(--accent-light-blue);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .add-game-btn {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .add-game-btn:hover {
+            background-color: var(--accent-light-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.4);
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+        }
+        
+        .game-card {
+            background-color: var(--card-bg);
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 0 10px 20px var(--shadow-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            height: 520px;
+            cursor: pointer;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9);
+        }
+        
+        .game-image-container {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .game-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(10, 14, 23, 0.95), transparent);
+            padding: 25px;
+        }
+        
+        .game-title {
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+        }
+        
+        .game-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            background-color: rgba(0, 102, 255, 0.8);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background-color: var(--accent-blue);
+        }
+        
+        .edit-btn {
+            background-color: rgba(255, 165, 0, 0.8);
+        }
+        
+        .edit-btn:hover {
+            background-color: #ff9900;
+        }
+        
+        .delete-btn {
+            background-color: rgba(255, 50, 50, 0.8);
+        }
+        
+        .delete-btn:hover {
+            background-color: #ff3333;
+        }
+        
+        .share-game-btn {
+            background-color: rgba(37, 211, 102, 0.8);
+        }
+        
+        .share-game-btn:hover {
+            background-color: #25D366;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 450px;
+            background-color: var(--secondary-dark);
+            border-radius: 0;
+            box-shadow: 0 10px 20px var(--shadow-color);
+            padding: 25px;
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+        
+        .sidebar h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--accent-light-blue);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(19, 26, 45, 0.7);
+            border: 2px solid #2a3552;
+            border-radius: 0;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        /* Music Management */
+        .music-management {
+            margin-top: 25px;
+            border-top: 1px solid #2a3552;
+            padding-top: 20px;
+        }
+        
+        .music-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+            border: 1px solid #2a3552;
+            padding: 10px;
+        }
+        
+        .music-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            border-bottom: 1px solid #2a3552;
+        }
+        
+        .music-item:last-child {
+            border-bottom: none;
+        }
+        
+        .music-item-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .music-item-playing {
+            background-color: rgba(0, 102, 255, 0.2);
+            border-left: 3px solid var(--accent-blue);
+        }
+        
+        /* Media Section */
+        .media-section {
+            margin-top: 25px;
+            border-top: 1px solid #2a3552;
+            padding-top: 20px;
+        }
+        
+        .media-preview {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .media-item {
+            height: 100px;
+            background-color: rgba(19, 26, 45, 0.7);
+            border: 2px solid #2a3552;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .media-item:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        .media-item img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+        
+        .media-type-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(0, 102, 255, 0.8);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        /* Download Links */
+        .download-links {
+            margin-top: 25px;
+        }
+        
+        .link-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .link-item input {
+            flex: 1;
+        }
+        
+        .remove-btn {
+            background-color: rgba(255, 50, 50, 0.7);
+            color: white;
+            border: none;
+            width: 40px;
+            border-radius: 0;
+            cursor: pointer;
+        }
+        
+        .add-btn {
+            background-color: rgba(0, 102, 255, 0.7);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 0;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .save-btn, .cancel-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .save-btn {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+        
+        .save-btn:hover {
+            background-color: var(--accent-light-blue);
+        }
+        
+        .cancel-btn {
+            background-color: #444;
+            color: white;
+        }
+        
+        .cancel-btn:hover {
+            background-color: #666;
+        }
+        
+        /* Media Modal */
+        .media-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--player-bg);
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90vh;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--accent-blue);
+        }
+        
+        .modal-header {
+            background-color: var(--secondary-dark);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--accent-light-blue);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--accent-blue);
+        }
+        
+        .modal-body {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: calc(90vh - 80px);
+        }
+        
+        .game-details-header {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .detail-cover {
+            width: 300px;
+            height: 500px;
+            object-fit: cover;
+            border: 2px solid var(--accent-blue);
+        }
+        
+        .game-details-info {
+            flex: 1;
+        }
+        
+        .game-details-title {
+            font-size: 2.5rem;
+            color: var(--accent-light-blue);
+            margin-bottom: 15px;
+        }
+        
+        .game-details-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .media-gallery {
+            margin-top: 30px;
+        }
+        
+        .gallery-title {
+            font-size: 1.5rem;
+            color: var(--accent-light-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a3552;
+        }
+        
+        .gallery-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .gallery-item {
+            background-color: rgba(19, 26, 45, 0.7);
+            border: 2px solid #2a3552;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .gallery-item iframe, .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .download-section {
+            margin-top: 30px;
+        }
+        
+        .download-links-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .download-link-item {
+            background-color: rgba(19, 26, 45, 0.7);
+            padding: 15px;
+            border-left: 4px solid var(--accent-blue);
+        }
+        
+        .download-link-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--accent-light-blue);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #2a3552;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background-color: #2a3552;
+            margin-top: 10px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--accent-blue);
+            width: 0%;
+            transition: width 0.1s;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--secondary-dark);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 4000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .game-details-header {
+                flex-direction: column;
+            }
+            
+            .detail-cover {
+                width: 100%;
+                height: 400px;
+            }
+            
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .share-btn, .add-game-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Music Player -->
+    <audio id="background-music" loop></audio>
+    
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-gamepad fa-2x" style="color: #0066ff;"></i>
+                    <h1>Xtream Games</h1>
+                </div>
+                
+                <div class="music-player-container">
+                    <div class="now-playing" id="nowPlaying">
+                        <div class="song-title">No song playing</div>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="music-controls">
+                        <button class="music-btn" id="prevBtn">
+                            <i class="fas fa-step-backward"></i>
+                        </button>
+                        <button class="music-btn" id="playPauseBtn">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="music-btn" id="nextBtn">
+                            <i class="fas fa-step-forward"></i>
+                        </button>
+                        <button class="music-btn" id="addMusicBtn" title="Add Music">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Games Section -->
+            <section class="games-section">
+                <div class="games-header">
+                    <h2>Game Collection</h2>
+                    <div class="header-actions">
+                        <button class="share-btn" id="shareSiteBtn">
+                            <i class="fas fa-share-alt"></i> Share Site
+                        </button>
+                        <button class="add-game-btn" id="addNewGame">
+                            <i class="fas fa-plus"></i> Add New Game
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="games-grid" id="gamesGrid">
+                    <!-- Games will be loaded here -->
+                </div>
+                
+                <div class="empty-state" id="emptyState">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>No Games Added Yet</h3>
+                    <p>Click "Add New Game" to start building your collection</p>
+                </div>
+            </section>
+            
+            <!-- Sidebar Form -->
+            <aside class="sidebar">
+                <h3 id="formTitle">Add New Game</h3>
+                
+                <form id="gameForm">
+                    <input type="hidden" id="gameId">
+                    
+                    <div class="form-group">
+                        <label for="gameName">Game Title</label>
+                        <input type="text" id="gameName" placeholder="Enter game title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mainImage">Main Cover Image (1080x1920)</label>
+                        <input type="text" id="mainImage" placeholder="Enter image URL" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gameDescription">Game Description</label>
+                        <textarea id="gameDescription" placeholder="Enter game description"></textarea>
+                    </div>
+                    
+                    <!-- Music Management Section -->
+                    <div class="music-management">
+                        <h4>Background Music</h4>
+                        <div class="form-group">
+                            <label for="musicUrl">Add Music URL (MP3)</label>
+                            <input type="text" id="musicUrl" placeholder="Enter music URL">
+                            <button type="button" class="add-btn" id="addMusicUrlBtn">
+                                <i class="fas fa-plus"></i> Add to Playlist
+                            </button>
+                        </div>
+                        
+                        <div class="music-list" id="musicList">
+                            <!-- Music items will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Media Section -->
+                    <div class="media-section">
+                        <h4>Game Media (Images & Videos)</h4>
+                        <div class="form-group">
+                            <label for="mediaUrl">Add Media URL (Image or YouTube)</label>
+                            <input type="text" id="mediaUrl" placeholder="Enter image or YouTube URL">
+                            <button type="button" class="add-btn" id="addMediaBtn">
+                                <i class="fas fa-plus"></i> Add Media
+                            </button>
+                        </div>
+                        <div class="media-preview" id="mediaPreview">
+                            <!-- Media previews will appear here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Download Links -->
+                    <div class="download-links">
+                        <h4>Download Links</h4>
+                        <div id="downloadLinks">
+                            <!-- Download links will be added here -->
+                        </div>
+                        <button type="button" class="add-btn" id="addLinkBtn">
+                            <i class="fas fa-plus"></i> Add Download Link
+                        </button>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="save-btn" id="saveBtn">
+                            <i class="fas fa-save"></i> Save Game
+                        </button>
+                        <button type="button" class="cancel-btn" id="cancelBtn">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </aside>
+        </div>
+    </div>
+    
+    <!-- Share Modal -->
+    <div class="share-modal" id="shareModal">
+        <div class="share-modal-content">
+            <div class="share-modal-header">
+                <h3 class="share-modal-title">Share Xtream Games</h3>
+                <button class="close-share-modal" id="closeShareModal">&times;</button>
+            </div>
+            <div class="share-modal-body">
+                <h4>Share via:</h4>
+                <div class="share-options">
+                    <div class="share-option" id="shareWhatsApp">
+                        <i class="fab fa-whatsapp share-icon share-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </div>
+                    <div class="share-option" id="shareTelegram">
+                        <i class="fab fa-telegram share-icon share-telegram"></i>
+                        <span>Telegram</span>
+                    </div>
+                    <div class="share-option" id="shareEmail">
+                        <i class="fas fa-envelope share-icon share-email"></i>
+                        <span>Email</span>
+                    </div>
+                    <div class="share-option" id="copyLink">
+                        <i class="fas fa-link share-icon share-link"></i>
+                        <span>Copy Link</span>
+                    </div>
+                    <div class="share-option" id="downloadSite">
+                        <i class="fas fa-download share-icon share-download"></i>
+                        <span>Download Site</span>
+                    </div>
+                    <div class="share-option" id="showQR">
+                        <i class="fas fa-qrcode share-icon share-qr"></i>
+                        <span>QR Code</span>
+                    </div>
+                </div>
+                
+                <div class="url-container">
+                    <input type="text" readonly class="url-input" id="siteUrl" value="Loading...">
+                    <button class="copy-btn" id="copyUrlBtn">Copy</button>
+                </div>
+                
+                <div class="qr-container" id="qrContainer">
+                    <h4>Scan QR Code to open on mobile:</h4>
+                    <div class="qr-code" id="qrCode"></div>
+                </div>
+                
+                <div class="export-options">
+                    <h4>Export Your Data:</h4>
+                    <button class="export-btn" id="exportGamesBtn">
+                        <i class="fas fa-file-export"></i> Export Games Data (JSON)
+                    </button>
+                    <button class="export-btn export-json" id="importGamesBtn">
+                        <i class="fas fa-file-import"></i> Import Games Data
+                    </button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Media/Game Details Modal -->
+    <div class="media-modal" id="mediaModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Game Details</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+    
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    
+    <script>
+        // DOM Elements
+        const gamesGrid = document.getElementById('gamesGrid');
+        const emptyState = document.getElementById('emptyState');
+        const gameForm = document.getElementById('gameForm');
+        const formTitle = document.getElementById('formTitle');
+        const gameIdInput = document.getElementById('gameId');
+        const gameNameInput = document.getElementById('gameName');
+        const mainImageInput = document.getElementById('mainImage');
+        const gameDescriptionInput = document.getElementById('gameDescription');
+        const mediaUrlInput = document.getElementById('mediaUrl');
+        const mediaPreview = document.getElementById('mediaPreview');
+        const musicUrlInput = document.getElementById('musicUrl');
+        const musicList = document.getElementById('musicList');
+        const downloadLinks = document.getElementById('downloadLinks');
+        const addNewGameBtn = document.getElementById('addNewGame');
+        const addMediaBtn = document.getElementById('addMediaBtn');
+        const addMusicUrlBtn = document.getElementById('addMusicUrlBtn');
+        const addLinkBtn = document.getElementById('addLinkBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const shareSiteBtn = document.getElementById('shareSiteBtn');
+        const mediaModal = document.getElementById('mediaModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const closeModal = document.getElementById('closeModal');
+        
+        // Share Modal Elements
+        const shareModal = document.getElementById('shareModal');
+        const closeShareModal = document.getElementById('closeShareModal');
+        const siteUrlInput = document.getElementById('siteUrl');
+        const copyUrlBtn = document.getElementById('copyUrlBtn');
+        const shareWhatsApp = document.getElementById('shareWhatsApp');
+        const shareTelegram = document.getElementById('shareTelegram');
+        const shareEmail = document.getElementById('shareEmail');
+        const copyLink = document.getElementById('copyLink');
+        const downloadSite = document.getElementById('downloadSite');
+        const showQR = document.getElementById('showQR');
+        const qrContainer = document.getElementById('qrContainer');
+        const qrCode = document.getElementById('qrCode');
+        const exportGamesBtn = document.getElementById('exportGamesBtn');
+        const importGamesBtn = document.getElementById('importGamesBtn');
+        const importFile = document.getElementById('importFile');
+        
+        // Toast Notification
+        const toast = document.getElementById('toast');
+        
+        // Music Player Elements
+        const backgroundMusic = document.getElementById('background-music');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const addMusicBtn = document.getElementById('addMusicBtn');
+        const nowPlaying = document.getElementById('nowPlaying');
+        const progressBar = document.getElementById('progressBar');
+        const songTitleElement = nowPlaying.querySelector('.song-title');
+        
+        // State
+        let games = [];
+        let currentGameId = null;
+        let mediaItems = [];
+        let downloadLinkItems = [];
+        let musicPlaylist = [];
+        let currentMusicIndex = 0;
+        let isPlaying = false;
+        let updateProgressInterval;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGames();
+            loadMusicPlaylist();
+            setupEventListeners();
+            loadDefaultMusic();
+            updateSiteUrl();
+        });
+        
+        // Event Listeners
+        function setupEventListeners() {
+            addNewGameBtn.addEventListener('click', resetForm);
+            addMediaBtn.addEventListener('click', addMediaItem);
+            addMusicUrlBtn.addEventListener('click', addMusicToPlaylist);
+            addLinkBtn.addEventListener('click', addDownloadLink);
+            addMusicBtn.addEventListener('click', () => musicUrlInput.scrollIntoView({behavior: 'smooth'}));
+            gameForm.addEventListener('submit', saveGame);
+            cancelBtn.addEventListener('click', resetForm);
+            
+            // Share functionality
+            shareSiteBtn.addEventListener('click', openShareModal);
+            closeShareModal.addEventListener('click', closeShareModalFunc);
+            shareModal.addEventListener('click', function(e) {
+                if (e.target === shareModal) {
+                    closeShareModalFunc();
+                }
+            });
+            
+            copyUrlBtn.addEventListener('click', copySiteUrl);
+            shareWhatsApp.addEventListener('click', shareViaWhatsApp);
+            shareTelegram.addEventListener('click', shareViaTelegram);
+            shareEmail.addEventListener('click', shareViaEmail);
+            copyLink.addEventListener('click', copySiteUrl);
+            downloadSite.addEventListener('click', downloadSiteFiles);
+            showQR.addEventListener('click', generateQRCode);
+            exportGamesBtn.addEventListener('click', exportGamesData);
+            importGamesBtn.addEventListener('click', () => importFile.click());
+            importFile.addEventListener('change', importGamesData);
+            
+            // Music player controls
+            playPauseBtn.addEventListener('click', togglePlayPause);
+            prevBtn.addEventListener('click', playPrevious);
+            nextBtn.addEventListener('click', playNext);
+            
+            // Modal controls
+            closeModal.addEventListener('click', closeMediaModal);
+            mediaModal.addEventListener('click', function(e) {
+                if (e.target === mediaModal) {
+                    closeMediaModal();
+                }
+            });
+            
+            // Progress bar click
+            nowPlaying.addEventListener('click', function(e) {
+                if (e.target.classList.contains('progress-container')) {
+                    const rect = e.target.getBoundingClientRect();
+                    const clickPosition = (e.clientX - rect.left) / rect.width;
+                    backgroundMusic.currentTime = clickPosition * backgroundMusic.duration;
+                }
+            });
+            
+            // Music events
+            backgroundMusic.addEventListener('timeupdate', updateProgressBar);
+            backgroundMusic.addEventListener('ended', playNext);
+            
+            // Auto-save for media items
+            mediaUrlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addMediaItem();
+                }
+            });
+            
+            musicUrlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addMusicToPlaylist();
+                }
+            });
+        }
+        
+        // Share Functionality
+        function openShareModal() {
+            shareModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            updateSiteUrl();
+        }
+        
+        function closeShareModalFunc() {
+            shareModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            qrContainer.style.display = 'none';
+        }
+        
+        function updateSiteUrl() {
+            siteUrlInput.value = "https://arianxenon.github.io/xtreamgames";
+        }
+        
+        function copySiteUrl() {
+            siteUrlInput.select();
+            siteUrlInput.setSelectionRange(0, 99999); // For mobile devices
+            navigator.clipboard.writeText(siteUrlInput.value).then(() => {
+                showToast('Link copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                // Fallback for older browsers
+                document.execCommand('copy');
+                showToast('Link copied to clipboard!');
+            });
+        }
+        
+        function shareViaWhatsApp() {
+            const url = encodeURIComponent(siteUrlInput.value);
+            const text = encodeURIComponent("Check out this awesome gaming collection on Xtream Games!");
+            window.open(`https://wa.me/?text=${text}%20${url}`, '_blank');
+            showToast('Opening WhatsApp...');
+        }
+        
+        function shareViaTelegram() {
+            const url = encodeURIComponent(siteUrlInput.value);
+            const text = encodeURIComponent("Check out this awesome gaming collection on Xtream Games!");
+            window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
+            showToast('Opening Telegram...');
+        }
+        
+        function shareViaEmail() {
+            const subject = encodeURIComponent("Xtream Games - Awesome Gaming Collection");
+            const body = encodeURIComponent(`Check out this awesome gaming collection!\n\n${siteUrlInput.value}\n\nYou can view and manage your favorite games with videos, music, and download links.`);
+            window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
+            showToast('Opening email client...');
+        }
+        
+        function downloadSiteFiles() {
+            // Create a download link for the entire HTML page
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Xtream-Games.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Site downloaded as HTML file!');
+        }
+        
+        function generateQRCode() {
+            qrContainer.style.display = 'block';
+            qrCode.innerHTML = '';
+            
+            QRCode.toCanvas(qrCode, siteUrlInput.value, {
+                width: 200,
+                height: 200,
+                margin: 1,
+                color: {
+                    dark: '#0066ff',
+                    light: '#0f1524'
+                }
+            }, function(error) {
+                if (error) {
+                    qrCode.innerHTML = '<p style="color: red;">Error generating QR code</p>';
+                    console.error(error);
+                }
+            });
+            
+            // Scroll to QR code
+            qrContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function exportGamesData() {
+            const data = {
+                games: games,
+                musicPlaylist: musicPlaylist,
+                exportDate: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'xtream-games-backup.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Games data exported successfully!');
+        }
+        
+        function importGamesData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (data.games && Array.isArray(data.games)) {
+                        // Ask user what to do
+                        const choice = confirm('Import games data? This will replace your current games.\n\nClick OK to replace, Cancel to merge.');
+                        
+                        if (choice) {
+                            // Replace existing games
+                            games = data.games;
+                        } else {
+                            // Merge with existing games
+                            const existingIds = games.map(g => g.id);
+                            const newGames = data.games.filter(g => !existingIds.includes(g.id));
+                            games = [...games, ...newGames];
+                        }
+                        
+                        localStorage.setItem('xtreamGames', JSON.stringify(games));
+                        loadGames();
+                        
+                        // Import music playlist if available
+                        if (data.musicPlaylist && Array.isArray(data.musicPlaylist)) {
+                            musicPlaylist = [...musicPlaylist, ...data.musicPlaylist];
+                            // Remove duplicates based on URL
+                            const uniqueUrls = new Set();
+                            musicPlaylist = musicPlaylist.filter(track => {
+                                if (uniqueUrls.has(track.url)) {
+                                    return false;
+                                }
+                                uniqueUrls.add(track.url);
+                                return true;
+                            });
+                            
+                            saveMusicPlaylist();
+                            renderMusicPlaylist();
+                        }
+                        
+                        showToast('Games data imported successfully!');
+                        closeShareModalFunc();
+                    } else {
+                        showToast('Invalid data format', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                    showToast('Error importing data', 'error');
+                }
+            };
+            
+            reader.readAsText(file);
+            // Reset file input
+            importFile.value = '';
+        }
+        
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = 'toast';
+            toast.classList.add('show');
+            
+            if (type === 'error') {
+                toast.style.borderLeftColor = '#ff3333';
+            }
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Music Player Functions
+        function loadDefaultMusic() {
+            const defaultTracks = [
+                {
+                    title: "Gaming Adventure",
+                    url: "https://assets.mixkit.co/music/preview/mixkit-game-show-suspense-waiting-667.mp3"
+                },
+                {
+                    title: "Epic Gaming",
+                    url: "https://assets.mixkit.co/music/preview/mixkit-epic-game-over-641.mp3"
+                },
+                {
+                    title: "Retro Gaming",
+                    url: "https://assets.mixkit.co/music/preview/mixkit-retro-game-emergency-689.mp3"
+                }
+            ];
+            
+            // Only add default tracks if playlist is empty
+            if (musicPlaylist.length === 0) {
+                musicPlaylist.push(...defaultTracks);
+                saveMusicPlaylist();
+                renderMusicPlaylist();
+                
+                // Start playing the first track
+                if (musicPlaylist.length > 0) {
+                    playMusic(currentMusicIndex);
+                }
+            } else if (musicPlaylist.length > 0) {
+                // Start playing the first track
+                playMusic(currentMusicIndex);
+            }
+        }
+        
+        function loadMusicPlaylist() {
+            const savedPlaylist = localStorage.getItem('xtreamGamesMusic');
+            musicPlaylist = savedPlaylist ? JSON.parse(savedPlaylist) : [];
+            renderMusicPlaylist();
+        }
+        
+        function saveMusicPlaylist() {
+            localStorage.setItem('xtreamGamesMusic', JSON.stringify(musicPlaylist));
+        }
+        
+        function addMusicToPlaylist() {
+            const url = musicUrlInput.value.trim();
+            if (!url) {
+                alert('Please enter a music URL');
+                return;
+            }
+            
+            // Check if it's an MP3 file
+            if (!url.endsWith('.mp3') && !url.includes('audio/mpeg')) {
+                if (!confirm('This might not be an MP3 file. Continue anyway?')) {
+                    return;
+                }
+            }
+            
+            const title = prompt('Enter song title:', 'New Track');
+            if (!title) return;
+            
+            const newTrack = {
+                title: title,
+                url: url
+            };
+            
+            musicPlaylist.push(newTrack);
+            saveMusicPlaylist();
+            renderMusicPlaylist();
+            
+            musicUrlInput.value = '';
+            
+            // If this is the first track, start playing it
+            if (musicPlaylist.length === 1) {
+                currentMusicIndex = 0;
+                playMusic(currentMusicIndex);
+            }
+            
+            alert(`"${title}" added to playlist!`);
+        }
+        
+        function removeMusicFromPlaylist(index) {
+            if (!confirm('Remove this track from playlist?')) return;
+            
+            musicPlaylist.splice(index, 1);
+            saveMusicPlaylist();
+            renderMusicPlaylist();
+            
+            // Adjust current index if needed
+            if (currentMusicIndex >= musicPlaylist.length) {
+                currentMusicIndex = Math.max(0, musicPlaylist.length - 1);
+            }
+            
+            // If we removed the currently playing track, play the new current track
+            if (isPlaying && musicPlaylist.length > 0) {
+                playMusic(currentMusicIndex);
+            } else if (musicPlaylist.length === 0) {
+                backgroundMusic.pause();
+                backgroundMusic.src = '';
+                isPlaying = false;
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                songTitleElement.textContent = 'No song playing';
+            }
+        }
+        
+        function renderMusicPlaylist() {
+            musicList.innerHTML = '';
+            
+            if (musicPlaylist.length === 0) {
+                musicList.innerHTML = '<div style="color: #777; text-align: center; padding: 10px;">No music in playlist</div>';
+                return;
+            }
+            
+            musicPlaylist.forEach((track, index) => {
+                const musicItem = document.createElement('div');
+                musicItem.className = `music-item ${index === currentMusicIndex && isPlaying ? 'music-item-playing' : ''}`;
+                musicItem.innerHTML = `
+                    <div class="music-item-info">
+                        <i class="fas fa-music"></i>
+                        <span>${track.title}</span>
+                    </div>
+                    <div>
+                        ${index === currentMusicIndex && isPlaying ? '<i class="fas fa-volume-up" style="color: #3399ff;"></i>' : ''}
+                        <button onclick="removeMusicFromPlaylist(${index})" style="background: rgba(255,50,50,0.7); color: white; border: none; padding: 5px 10px; margin-left: 10px; cursor: pointer; border-radius: 0;">Remove</button>
+                    </div>
+                `;
+                
+                musicItem.addEventListener('click', function(e) {
+                    if (!e.target.tagName === 'BUTTON') {
+                        currentMusicIndex = index;
+                        playMusic(currentMusicIndex);
+                    }
+                });
+                
+                musicList.appendChild(musicItem);
+            });
+        }
+        
+        function playMusic(index) {
+            if (musicPlaylist.length === 0) return;
+            
+            if (index < 0) index = musicPlaylist.length - 1;
+            if (index >= musicPlaylist.length) index = 0;
+            
+            currentMusicIndex = index;
+            const track = musicPlaylist[currentMusicIndex];
+            
+            backgroundMusic.src = track.url;
+            backgroundMusic.load();
+            
+            backgroundMusic.play().then(() => {
+                isPlaying = true;
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                songTitleElement.textContent = track.title;
+                renderMusicPlaylist();
+            }).catch(error => {
+                console.error('Error playing audio:', error);
+                songTitleElement.textContent = 'Error playing: ' + track.title;
+            });
+        }
+        
+        function togglePlayPause() {
+            if (musicPlaylist.length === 0) {
+                alert('Add some music to the playlist first!');
+                return;
+            }
+            
+            if (isPlaying) {
+                backgroundMusic.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            } else {
+                if (!backgroundMusic.src || backgroundMusic.src === '') {
+                    playMusic(currentMusicIndex);
+                } else {
+                    backgroundMusic.play();
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+            }
+            isPlaying = !isPlaying;
+            renderMusicPlaylist();
+        }
+        
+        function playPrevious() {
+            if (musicPlaylist.length === 0) return;
+            
+            currentMusicIndex--;
+            if (currentMusicIndex < 0) currentMusicIndex = musicPlaylist.length - 1;
+            playMusic(currentMusicIndex);
+        }
+        
+        function playNext() {
+            if (musicPlaylist.length === 0) return;
+            
+            currentMusicIndex++;
+            if (currentMusicIndex >= musicPlaylist.length) currentMusicIndex = 0;
+            playMusic(currentMusicIndex);
+        }
+        
+        function updateProgressBar() {
+            if (backgroundMusic.duration) {
+                const progress = (backgroundMusic.currentTime / backgroundMusic.duration) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+        }
+        
+        // Load Games
+        function loadGames() {
+            const savedGames = localStorage.getItem('xtreamGames');
+            games = savedGames ? JSON.parse(savedGames) : [];
+            
+            if (games.length === 0) {
+                emptyState.style.display = 'block';
+                gamesGrid.innerHTML = '';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            renderGames();
+        }
+        
+        // Render Games
+        function renderGames() {
+            gamesGrid.innerHTML = '';
+            
+            games.forEach(game => {
+                const gameCard = document.createElement('div');
+                gameCard.className = 'game-card';
+                
+                gameCard.innerHTML = `
+                    <div class="game-image-container">
+                        <img src="${game.mainImage}" alt="${game.name}" class="game-image" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1080&h=1920&fit=crop'">
+                        <div class="game-overlay">
+                            <div class="game-title">${game.name}</div>
+                            <div class="game-actions">
+                                <button class="action-btn edit-btn" onclick="editGame(${game.id})">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="action-btn" onclick="viewGameDetails(${game.id})">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                                <button class="action-btn share-game-btn" onclick="shareGame(${game.id})">
+                                    <i class="fas fa-share"></i> Share
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteGame(${game.id})">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Add click event to view game details
+                gameCard.addEventListener('click', function(e) {
+                    if (!e.target.closest('.game-actions')) {
+                        viewGameDetails(game.id);
+                    }
+                });
+                
+                gamesGrid.appendChild(gameCard);
+            });
+        }
+        
+        // Share individual game
+        function shareGame(id) {
+            const game = games.find(g => g.id === id);
+            if (!game) return;
+            
+            const gameUrl = `${window.location.origin}${window.location.pathname}?game=${id}`;
+            const text = `Check out "${game.name}" on Xtream Games!`;
+            
+            if (navigator.share) {
+                // Use Web Share API if available
+                navigator.share({
+                    title: game.name,
+                    text: text,
+                    url: gameUrl
+                }).then(() => {
+                    showToast('Game shared successfully!');
+                }).catch(error => {
+                    console.error('Error sharing:', error);
+                    copyToClipboard(gameUrl);
+                });
+            } else {
+                // Fallback to copying link
+                copyToClipboard(gameUrl);
+            }
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Game link copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                showToast('Failed to copy link', 'error');
+            });
+        }
+        
+        // Game View/Details Modal
+        function viewGameDetails(id) {
+            const game = games.find(g => g.id === id);
+            if (!game) return;
+            
+            modalTitle.textContent = game.name;
+            
+            // Build modal content
+            let mediaHTML = '';
+            if (game.media && game.media.length > 0) {
+                mediaHTML = `
+                    <div class="media-gallery">
+                        <h4 class="gallery-title">Game Media</h4>
+                        <div class="gallery-items">
+                `;
+                
+                game.media.forEach(mediaUrl => {
+                    if (isYouTubeUrl(mediaUrl)) {
+                        const videoId = extractYouTubeId(mediaUrl);
+                        mediaHTML += `
+                            <div class="gallery-item">
+                                <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        `;
+                    } else {
+                        mediaHTML += `
+                            <div class="gallery-item">
+                                <img src="${mediaUrl}" alt="Game media" onerror="this.parentElement.innerHTML='<div style=\\'display: flex; align-items: center; justify-content: center; height: 100%;\\'><i class=\\'fas fa-image\\' style=\\'font-size: 3rem; color: #777;\\'></i></div>'">
+                            </div>
+                        `;
+                    }
+                });
+                
+                mediaHTML += `
+                        </div>
+                    </div>
+                `;
+            }
+            
+            let downloadLinksHTML = '';
+            if (game.downloadLinks && game.downloadLinks.length > 0) {
+                downloadLinksHTML = `
+                    <div class="download-section">
+                        <h4 class="gallery-title">Download Links</h4>
+                        <div class="download-links-list">
+                `;
+                
+                game.downloadLinks.forEach(link => {
+                    downloadLinksHTML += `
+                        <div class="download-link-item">
+                            <div class="download-link-name">${link.name}</div>
+                            <a href="${link.url}" target="_blank" style="color: #3399ff; text-decoration: none; word-break: break-all;">
+                                ${link.url.length > 50 ? link.url.substring(0, 50) + '...' : link.url}
+                            </a>
+                        </div>
+                    `;
+                });
+                
+                downloadLinksHTML += `
+                        </div>
+                    </div>
+                `;
+            }
+            
+            modalBody.innerHTML = `
+                <div class="game-details-header">
+                    <img src="${game.mainImage}" alt="${game.name}" class="detail-cover" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1080&h=1920&fit=crop'">
+                    <div class="game-details-info">
+                        <h2 class="game-details-title">${game.name}</h2>
+                        <div class="game-details-description">${game.description || 'No description available.'}</div>
+                        <div class="game-actions">
+                            <button class="action-btn edit-btn" onclick="editGame(${game.id}); closeMediaModal();">
+                                <i class="fas fa-edit"></i> Edit Game
+                            </button>
+                            <button class="action-btn share-game-btn" onclick="shareGame(${game.id});">
+                                <i class="fas fa-share"></i> Share Game
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                ${mediaHTML}
+                ${downloadLinksHTML}
+            `;
+            
+            mediaModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMediaModal() {
+            mediaModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Stop all videos in modal
+            const iframes = modalBody.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                iframe.src = iframe.src.replace('autoplay=1', 'autoplay=0');
+            });
+        }
+        
+        function isYouTubeUrl(url) {
+            return url.includes('youtube.com') || url.includes('youtu.be');
+        }
+        
+        function extractYouTubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+        
+        // Add/Edit Game
+        function resetForm() {
+            currentGameId = null;
+            formTitle.textContent = 'Add New Game';
+            gameIdInput.value = '';
+            gameNameInput.value = '';
+            mainImageInput.value = '';
+            gameDescriptionInput.value = '';
+            mediaUrlInput.value = '';
+            musicUrlInput.value = '';
+            mediaItems = [];
+            downloadLinkItems = [];
+            renderMediaPreview();
+            renderDownloadLinks();
+        }
+        
+        function editGame(id) {
+            const game = games.find(g => g.id === id);
+            if (!game) return;
+            
+            currentGameId = id;
+            formTitle.textContent = 'Edit Game';
+            gameIdInput.value = game.id;
+            gameNameInput.value = game.name;
+            mainImageInput.value = game.mainImage;
+            gameDescriptionInput.value = game.description || '';
+            mediaItems = game.media || [];
+            downloadLinkItems = game.downloadLinks || [];
+            
+            renderMediaPreview();
+            renderDownloadLinks();
+        }
+        
+        function saveGame(e) {
+            e.preventDefault();
+            
+            if (!gameNameInput.value.trim() || !mainImageInput.value.trim()) {
+                alert('Please enter game name and main image URL');
+                return;
+            }
+            
+            const gameData = {
+                id: currentGameId || Date.now(),
+                name: gameNameInput.value.trim(),
+                mainImage: mainImageInput.value.trim(),
+                description: gameDescriptionInput.value.trim(),
+                media: [...mediaItems],
+                downloadLinks: [...downloadLinkItems],
+                updatedAt: new Date().toISOString()
+            };
+            
+            if (currentGameId) {
+                // Update existing game
+                const index = games.findIndex(g => g.id === currentGameId);
+                if (index !== -1) {
+                    games[index] = gameData;
+                }
+            } else {
+                // Add new game
+                games.push(gameData);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('xtreamGames', JSON.stringify(games));
+            
+            // Update UI
+            loadGames();
+            resetForm();
+            
+            // Show confirmation
+            showToast(`Game "${gameData.name}" saved successfully!`);
+        }
+        
+        // Delete Game
+        function deleteGame(id) {
+            if (!confirm('Are you sure you want to delete this game?')) return;
+            
+            games = games.filter(g => g.id !== id);
+            localStorage.setItem('xtreamGames', JSON.stringify(games));
+            loadGames();
+            
+            if (currentGameId === id) {
+                resetForm();
+            }
+            
+            showToast('Game deleted successfully!');
+        }
+        
+        // Media Management
+        function addMediaItem() {
+            const url = mediaUrlInput.value.trim();
+            if (!url) {
+                alert('Please enter a media URL');
+                return;
+            }
+            
+            mediaItems.push(url);
+            mediaUrlInput.value = '';
+            renderMediaPreview();
+        }
+        
+        function removeMediaItem(index) {
+            mediaItems.splice(index, 1);
+            renderMediaPreview();
+        }
+        
+        function renderMediaPreview() {
+            mediaPreview.innerHTML = '';
+            
+            if (mediaItems.length === 0) {
+                mediaPreview.innerHTML = '<div style="grid-column: 1 / -1; color: #777; text-align: center; padding: 10px;">No media added</div>';
+                return;
+            }
+            
+            mediaItems.forEach((url, index) => {
+                const mediaItem = document.createElement('div');
+                mediaItem.className = 'media-item';
+                
+                // Check if it's a YouTube video
+                if (isYouTubeUrl(url)) {
+                    const videoId = extractYouTubeId(url);
+                    mediaItem.innerHTML = `
+                        <div style="text-align: center; width: 100%;">
+                            <i class="fab fa-youtube" style="font-size: 2rem; color: #ff0000;"></i>
+                            <div style="font-size: 0.8rem; margin-top: 5px;">YouTube Video</div>
+                            <span class="media-type-badge">Video</span>
+                            <button onclick="removeMediaItem(${index})" style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 0;">X</button>
+                        </div>
+                    `;
+                } else if (url.includes('.mp4') || url.includes('.webm') || url.includes('.ogg')) {
+                    // Other video formats
+                    mediaItem.innerHTML = `
+                        <div style="text-align: center; width: 100%;">
+                            <i class="fas fa-video" style="font-size: 2rem; color: #0066ff;"></i>
+                            <div style="font-size: 0.8rem; margin-top: 5px;">Video File</div>
+                            <span class="media-type-badge">Video</span>
+                            <button onclick="removeMediaItem(${index})" style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 0;">X</button>
+                        </div>
+                    `;
+                } else {
+                    // Assume it's an image
+                    mediaItem.innerHTML = `
+                        <img src="${url}" alt="Media ${index + 1}" onerror="this.parentElement.innerHTML='<i class=\'fas fa-image\' style=\'font-size: 2rem; color: #777;\'></i><span class=\'media-type-badge\'>Image</span><button onclick=\'removeMediaItem(${index})\' style=\'position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 0;\'>X</button>'">
+                        <span class="media-type-badge">Image</span>
+                        <button onclick="removeMediaItem(${index})" style="position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.7); color: white; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 0;">X</button>
+                    `;
+                }
+                
+                mediaPreview.appendChild(mediaItem);
+            });
+        }
+        
+        // Download Links Management
+        function addDownloadLink() {
+            const linkId = Date.now();
+            downloadLinkItems.push({ id: linkId, name: '', url: '' });
+            renderDownloadLinks();
+        }
+        
+        function removeDownloadLink(id) {
+            downloadLinkItems = downloadLinkItems.filter(link => link.id !== id);
+            renderDownloadLinks();
+        }
+        
+        function updateDownloadLink(id, field, value) {
+            const link = downloadLinkItems.find(l => l.id === id);
+            if (link) {
+                link[field] = value;
+            }
+        }
+        
+        function renderDownloadLinks() {
+            downloadLinks.innerHTML = '';
+            
+            if (downloadLinkItems.length === 0) {
+                downloadLinks.innerHTML = '<div style="color: #777; text-align: center; padding: 10px;">No download links added</div>';
+                return;
+            }
+            
+            downloadLinkItems.forEach(link => {
+                const linkItem = document.createElement('div');
+                linkItem.className = 'link-item';
+                linkItem.innerHTML = `
+                    <input type="text" placeholder="Link name (e.g., Part 1)" value="${link.name}" onchange="updateDownloadLink(${link.id}, 'name', this.value)">
+                    <input type="text" placeholder="Download URL" value="${link.url}" onchange="updateDownloadLink(${link.id}, 'url', this.value)">
+                    <button type="button" class="remove-btn" onclick="removeDownloadLink(${link.id})">X</button>
+                `;
+                downloadLinks.appendChild(linkItem);
+            });
+        }
+        
+        // Add sample games if empty
+        function loadSampleGames() {
+            const savedGames = localStorage.getItem('xtreamGames');
+            if (!savedGames) {
+                const sampleGames = [
+                    {
+                        id: 1,
+                        name: "Cyberpunk 2077",
+                        mainImage: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1080&h=1920&fit=crop",
+                        description: "An open-world RPG set in the futuristic Night City. Explore a vast metropolis where choices shape your story.",
+                        media: [
+                            "https://www.youtube.com/embed/LembwKDo1Dk",
+                            "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1080&h=720&fit=crop",
+                            "https://images.unsplash.com/embed/photo-1542751371-adc38448a05e?q=80&w=1080&h=720&fit=crop"
+                        ],
+                        downloadLinks: [
+                            { id: 101, name: "Part 1", url: "https://example.com/cyberpunk-part1.zip" },
+                            { id: 102, name: "Part 2", url: "https://example.com/cyberpunk-part2.zip" },
+                            { id: 103, name: "Crack", url: "https://example.com/cyberpunk-crack.zip" }
+                        ],
+                        updatedAt: "2023-10-01T10:00:00Z"
+                    },
+                    {
+                        id: 2,
+                        name: "Elden Ring",
+                        mainImage: "https://images.unsplash.com/photo-1633265486064-086b219458ec?q=80&w=1080&h=1920&fit=crop",
+                        description: "A fantasy action RPG from the creators of Dark Souls. Rise, Tarnished, and be guided by grace.",
+                        media: [
+                            "https://www.youtube.com/embed/E3Huy2cdih0",
+                            "https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=1080&h=720&fit=crop"
+                        ],
+                        downloadLinks: [
+                            { id: 201, name: "Full Game", url: "https://example.com/elden-ring.zip" },
+                            { id: 202, name: "Update v1.10", url: "https://example.com/elden-ring-update.zip" }
+                        ],
+                        updatedAt: "2023-09-15T14:30:00Z"
+                    }
+                ];
+                
+                localStorage.setItem('xtreamGames', JSON.stringify(sampleGames));
+                loadGames();
+            }
+        }
+        
+        // Load sample games on first run
+        loadSampleGames();
+    </script>
+</body>
+</html>
